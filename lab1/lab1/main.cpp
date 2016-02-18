@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -11,13 +12,23 @@ int main()
 {
 	short int choice = 0;
 	int a;
-	bool isExit = 0;
+	bool isExit;
 	char b;
 	float c;
 	double d ;
 	long e;
+	short int count=0;
 	do
 	{
+		cin.clear();
+		cin.ignore(cin.rdbuf()->in_avail());
+		if (count >2)
+		{
+			count = 0;
+			system("cls");
+		}
+		count++;
+		isExit = 0;
 		cout << "===============================" << endl
 			<< "+++++++++++++MENU++++++++++++++" << endl
 			<< "==============================" << endl
@@ -37,6 +48,7 @@ int main()
 			cout << "int: ";
 			cin >> a;
 			PrintBinNumberf(a);
+
 			break;
 		case 2:
 			cout << "char: ";
@@ -63,6 +75,7 @@ int main()
 			break;
 		default:
 			cout << "ERR: wrong choise" << endl;
+			isExit = 1;
 			break;
 		}
 	} while (!isExit);
@@ -74,11 +87,12 @@ template<typename T>
 void PrintBinNumberf(const T arg)
 {
 	char *pointer = (char*)&arg;
+	cout << "size: " << sizeof(T) << "bytes"<<endl;
 	printLine(sizeof(T));
 	for (int i =0; i < sizeof(T) * 8 ; i++)
 	{
 		cout << i << "|";
-		if (i<10 && i>=0)
+		if (i<10)
 		{
 			cout << "0";
 		}
@@ -89,6 +103,7 @@ void PrintBinNumberf(const T arg)
 		PrintBin(*pointer);
 	}
 	printLine(sizeof(T) );
+	return;
 };
 
 void PrintBin(char number)
@@ -99,7 +114,6 @@ void PrintBin(char number)
 		number >>= 1;
 	}
 }
-
 
 void printLine(int countByte)
 {
