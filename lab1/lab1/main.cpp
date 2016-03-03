@@ -12,11 +12,10 @@ bool ChoiseInputType(int );
 int MenuPoint = 1;
 
 int main() {
-	system("color F0");	
-	int isExit = 1;
-	setlocale(0, "rus");
-	PrintMenu(1);
-	char symbol = _getch();	
+	system("color F0");
+	int isExit = 1;//flag to exit program
+	PrintMenu(1);//init menu
+	char symbol = _getch();
 	while (isExit && (symbol = _getch()))
 	{
 		system("cls");
@@ -30,13 +29,13 @@ int main() {
 			MenuPoint = 6;
 			break;
 		case 72:
-			//вверх
+			//up
 			MenuPoint--;
-			if (MenuPoint < 1)			
-				MenuPoint = 6;			
+			if (MenuPoint < 1)
+				MenuPoint = 6;
 			break;
 		case 80:
-			//вниз
+			//down
 			MenuPoint++;
 			if (MenuPoint > 6)
 				MenuPoint = 1;
@@ -56,84 +55,63 @@ int main() {
 void PrintMenu(int number)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	cout << "===============================" << endl
+		<< ":::::::::::::MENU::::::::::::::" << endl
+		<< "===============================" << endl;
 	switch (number)
 	{
 	case 1:
-		
-		cout << "===============================" << endl
-			<< ":::::::::::::MENU::::::::::::::" << endl
-			<< "===============================" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		cout << "-> " << "1 - int" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout<< "|| " << "2 - char" << endl
-		<< "|| " << "3 - float" << endl
-		<< "|| " << "4 - double" << endl
-		<< "|| " << "5 - long" << endl
-		<< "|| " << "6 - exit" << endl
-		<< "===============================" << endl;
+		cout << "|| " << "2 - char" << endl
+			<< "|| " << "3 - float" << endl
+			<< "|| " << "4 - double" << endl
+			<< "|| " << "5 - long" << endl
+			<< "|| " << "6 - exit" << endl;
 		break;
 	case 2:
-		cout << "===============================" << endl
-		<< ":::::::::::::MENU::::::::::::::" << endl
-			<< "===============================" << endl;
 		cout << "|| " << "1 - int" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		cout << "-> " << "2 - char" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-			cout<< "|| " << "3 - float" << endl
+		cout << "|| " << "3 - float" << endl
 			<< "|| " << "4 - double" << endl
 			<< "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl
-			<< "===============================" << endl;
+			<< "|| " << "6 - exit" << endl;
 		break;
 	case 3:
-		cout << "===============================" << endl
-			<< ":::::::::::::MENU::::::::::::::" << endl
-			<< "===============================" << endl
-			<< "|| " << "1 - int" << endl
+		cout << "|| " << "1 - int" << endl
 			<< "|| " << "2 - char" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		cout << "-> " << "3 - float" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		cout << "|| " << "4 - double" << endl
 			<< "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl
-			<< "===============================" << endl;
+			<< "|| " << "6 - exit" << endl;
 		break;
 	case 4:
-		cout << "===============================" << endl
-			<< ":::::::::::::MENU::::::::::::::" << endl
-			<< "===============================" << endl
-			<< "|| " << "1 - int" << endl
+		cout << "|| " << "1 - int" << endl
 			<< "|| " << "2 - char" << endl
 			<< "|| " << "3 - float" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		cout << "-> " << "4 - double" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		cout << "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl
-			<< "===============================" << endl;
+			<< "|| " << "6 - exit" << endl;
 		break;
 	case 5:
-		cout << "===============================" << endl
-			<< ":::::::::::::MENU::::::::::::::" << endl
-			<< "===============================" << endl
-			<< "|| " << "1 - int" << endl
+		cout << "|| " << "1 - int" << endl
 			<< "|| " << "2 - char" << endl
 			<< "|| " << "3 - float" << endl
 			<< "|| " << "4 - double" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		cout << "-> " << "5 - long" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout << "|| " << "6 - exit" << endl
-			<< "===============================" << endl;
+		cout << "|| " << "6 - exit" << endl;
 		break;
 	case 6:
-		cout << "===============================" << endl
-			<< ":::::::::::::MENU::::::::::::::" << endl
-			<< "===============================" << endl
-			<< "|| " << "1 - int" << endl
+		cout << "|| " << "1 - int" << endl
 			<< "|| " << "2 - char" << endl
 			<< "|| " << "3 - float" << endl
 			<< "|| " << "4 - double" << endl
@@ -141,11 +119,11 @@ void PrintMenu(int number)
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		cout << "-> " << "6 - exit" << endl;
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-			cout<< "===============================" << endl;
 		break;
 	default:
 		break;
 	}
+	cout << "===============================" << endl;
 }
 
 bool ChoiseInputType(int param)
@@ -184,6 +162,7 @@ bool ChoiseInputType(int param)
 		PrintBinNumber(e);
 		break;
 	case 6:
+		//exit
 		return false;
 		break;
 	default:
@@ -201,16 +180,12 @@ void PrintBinNumber(const T arg)
 	for (int i = 0; i < sizeof(T) * 8; i++)
 	{
 		if (i<10)
-		{
 			cout << "0";
-		}
 		cout << i << "|";
 	}
 	printLine(sizeof(T));
 	for (int i = 0; i < sizeof(T); i++, pointer++)
-	{
 		PrintBin(*pointer);
-	}
 	printLine(sizeof(T));
 	return;
 };
@@ -227,9 +202,7 @@ void PrintBin(char number)
 void printLine(int MenuPointByte)
 {
 	cout << endl;
-	for (int i = MenuPointByte * 8; i >0; i--)
-	{
+	for (int i = MenuPointByte * 8; i > 0; i--)
 		cout << "---";
-	}
 	cout << endl;
 }
