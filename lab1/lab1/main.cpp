@@ -1,108 +1,217 @@
 #include <iostream>
-#include <cstdlib>
+#include <conio.h>
+#include <Windows.h>
 
 using namespace std;
-
+void PrintMenu(int);
 template <typename T>
-void PrintBinNumberf(T);
+void PrintBinNumber(T);
 void PrintBin(char);
 void printLine(int);
+bool ChoiseInputType(int );
+int MenuPoint = 1;
 
-int main()
-{
-	short int choice = 0;
-	int a;
-	bool isExit;
-	char b;
-	float c;
-	double d ;
-	long e;
-	short int count=0;
-	do
+int main() {
+	system("color F0");	
+	int isExit = 1;
+	setlocale(0, "rus");
+	PrintMenu(1);
+	char symbol = _getch();	
+	while (isExit && (symbol = _getch()))
 	{
-		cin.clear();
-		cin.ignore(cin.rdbuf()->in_avail());
-		if (count >2)
-		{
-			count = 0;
-			system("cls");
+		system("cls");
+		switch (symbol) {
+		case 36:
+			//home
+			MenuPoint = 1;
+			break;
+		case 35:
+			//end
+			MenuPoint = 6;
+			break;
+		case 72:
+			//вверх
+			MenuPoint--;
+			if (MenuPoint < 1)			
+				MenuPoint = 6;			
+			break;
+		case 80:
+			//вниз
+			MenuPoint++;
+			if (MenuPoint > 6)
+				MenuPoint = 1;
+			break;
+		case 13:
+			//enter
+			isExit = ChoiseInputType(MenuPoint);
+			break;
+		default:
+			break;
 		}
-		count++;
-		isExit = 0;
+		PrintMenu(MenuPoint);
+	}
+	return 0;
+}
+
+void PrintMenu(int number)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	switch (number)
+	{
+	case 1:
+		
 		cout << "===============================" << endl
-			<< "+++++++++++++MENU++++++++++++++" << endl
-			<< "==============================" << endl
+			<< ":::::::::::::MENU::::::::::::::" << endl
+			<< "===============================" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		cout << "-> " << "1 - int" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		cout<< "|| " << "2 - char" << endl
+		<< "|| " << "3 - float" << endl
+		<< "|| " << "4 - double" << endl
+		<< "|| " << "5 - long" << endl
+		<< "|| " << "6 - exit" << endl
+		<< "===============================" << endl;
+		break;
+	case 2:
+		cout << "===============================" << endl
+		<< ":::::::::::::MENU::::::::::::::" << endl
+			<< "===============================" << endl;
+		cout << "|| " << "1 - int" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		cout << "-> " << "2 - char" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+			cout<< "|| " << "3 - float" << endl
+			<< "|| " << "4 - double" << endl
+			<< "|| " << "5 - long" << endl
+			<< "|| " << "6 - exit" << endl
+			<< "===============================" << endl;
+		break;
+	case 3:
+		cout << "===============================" << endl
+			<< ":::::::::::::MENU::::::::::::::" << endl
+			<< "===============================" << endl
+			<< "|| " << "1 - int" << endl
+			<< "|| " << "2 - char" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		cout << "-> " << "3 - float" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		cout << "|| " << "4 - double" << endl
+			<< "|| " << "5 - long" << endl
+			<< "|| " << "6 - exit" << endl
+			<< "===============================" << endl;
+		break;
+	case 4:
+		cout << "===============================" << endl
+			<< ":::::::::::::MENU::::::::::::::" << endl
+			<< "===============================" << endl
+			<< "|| " << "1 - int" << endl
+			<< "|| " << "2 - char" << endl
+			<< "|| " << "3 - float" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		cout << "-> " << "4 - double" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		cout << "|| " << "5 - long" << endl
+			<< "|| " << "6 - exit" << endl
+			<< "===============================" << endl;
+		break;
+	case 5:
+		cout << "===============================" << endl
+			<< ":::::::::::::MENU::::::::::::::" << endl
+			<< "===============================" << endl
+			<< "|| " << "1 - int" << endl
+			<< "|| " << "2 - char" << endl
+			<< "|| " << "3 - float" << endl
+			<< "|| " << "4 - double" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		cout << "-> " << "5 - long" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		cout << "|| " << "6 - exit" << endl
+			<< "===============================" << endl;
+		break;
+	case 6:
+		cout << "===============================" << endl
+			<< ":::::::::::::MENU::::::::::::::" << endl
+			<< "===============================" << endl
 			<< "|| " << "1 - int" << endl
 			<< "|| " << "2 - char" << endl
 			<< "|| " << "3 - float" << endl
 			<< "|| " << "4 - double" << endl
-			<< "|| " << "5 - long" << endl
-			<< "|| " << "0 - exit" << endl
-			<< "==============================" << endl;
-		cout << "you choice: ";
-		cin >> choice;
-		cout << "Input ";
-		switch (choice)
-		{
-		case 1:
-			cout << "int: ";
-			cin >> a;
-			PrintBinNumberf(a);
+			<< "|| " << "5 - long" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		cout << "-> " << "6 - exit" << endl;
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+			cout<< "===============================" << endl;
+		break;
+	default:
+		break;
+	}
+}
 
-			break;
-		case 2:
-			cout << "char: ";
-			cin >> b;
-			PrintBinNumberf(b);
-			break;
-		case 3:
-			cout << "float: ";
-			cin >> c;
-			PrintBinNumberf(c);
-			break;
-		case 4:
-			cout << "double: ";
-			cin >> d;
-			PrintBinNumberf(d);
-			break;
-		case 5:
-			cout << "long: ";
-			cin >> e;
-			PrintBinNumberf(e);
-			break;
-		case 0:
-			isExit = 1;
-			break;
-		default:
-			cout << "ERR: wrong choise" << endl;
-			isExit = 1;
-			break;
-		}
-	} while (!isExit);
-	system("pause");
-	return 0;
+bool ChoiseInputType(int param)
+{
+	int a;
+	char b;
+	float c;
+	double d;
+	long e;
+	PrintMenu(MenuPoint);
+	switch (param)
+	{
+	case 1:
+		cout << "int: ";
+		scanf("%d", &a);
+		PrintBinNumber(a);
+		break;
+	case 2:
+		cout << "char: ";
+		scanf("%c", &b);
+		PrintBinNumber(b);
+		break;
+	case 3:
+		cout << "float: ";
+		scanf("%f", &c);
+		PrintBinNumber(c);
+		break;
+	case 4:
+		cout << "double: ";
+		scanf("%f", &d);
+		PrintBinNumber(d);
+		break;
+	case 5:
+		cout << "long: ";
+		scanf("%d", &e);
+		PrintBinNumber(e);
+		break;
+	case 6:
+		return false;
+		break;
+	default:
+		break;
+	}
+	return true;
 }
 
 template<typename T>
-void PrintBinNumberf(const T arg)
+void PrintBinNumber(const T arg)
 {
-	char *pointer = (char*)&arg;
-	cout << "size: " << sizeof(T) << "bytes"<<endl;
+	char *pointer = (char*)&arg;	
+	cout << "size: " << sizeof(T) << "bytes" << endl;
 	printLine(sizeof(T));
-	for (int i =0; i < sizeof(T) * 8 ; i++)
+	for (int i = 0; i < sizeof(T) * 8; i++)
 	{
-		cout << i << "|";
 		if (i<10)
 		{
 			cout << "0";
 		}
+		cout << i << "|";
 	}
 	printLine(sizeof(T));
 	for (int i = 0; i < sizeof(T); i++, pointer++)
 	{
 		PrintBin(*pointer);
 	}
-	printLine(sizeof(T) );
+	printLine(sizeof(T));
 	return;
 };
 
@@ -110,15 +219,15 @@ void PrintBin(char number)
 {
 	for (int i = 0; i < 8; i++)
 	{
-		cout <<" "<< (number & 0x01)<<"|";
+		cout << " " << (number & 0x01) << "|";
 		number >>= 1;
 	}
 }
 
-void printLine(int countByte)
+void printLine(int MenuPointByte)
 {
 	cout << endl;
-	for (int i = countByte * 8; i >0; i--)
+	for (int i = MenuPointByte * 8; i >0; i--)
 	{
 		cout << "---";
 	}
