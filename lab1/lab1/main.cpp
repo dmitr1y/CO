@@ -20,11 +20,11 @@ int main() {
 	{
 		system("cls");
 		switch (symbol) {
-		case 36:
+		case 71:
 			//home
 			MenuPoint = 1;
 			break;
-		case 35:
+		case 79:
 			//end
 			MenuPoint = 6;
 			break;
