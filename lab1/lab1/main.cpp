@@ -15,11 +15,10 @@ int MenuPoint = 1;
 int main() {
 	system("color F0");
 	int isExit = 1;//flag to exit: 1->continue, 0->exit
+//	system("cls");
 	PrintMenu(1);//init menu
-	//char symbol = _getch();
 	char symbol;
-	//fflush(stdin);
-	while (isExit && (symbol = _getch()))
+	while ((isExit!=0) && ((symbol = _getch())!=0))
 	{
 		system("cls");
 		switch (symbol) {
@@ -166,8 +165,9 @@ bool ChoiseInputType(int param)
 		break;
 	case 4:
 		printf("double: ");
-		if(!scanf("%f", &d))
+		if(!scanf("%lf", &d))
 			throw 1;
+		printf("%lf", d);
 		PrintBinNumber(d);
 		break;
 	case 5:
@@ -192,32 +192,33 @@ void PrintBinNumber(const T arg)
 	char *pointer = (char*)&arg;	
 	printf("size: %d bytes \n" ,sizeof(T));
 	printLine(sizeof(T));
-	for (int i = 0; i < sizeof(T) * 8; i++)
+	for (int i = sizeof(T) * 8-1, j=7; i >=0 ; i--, j--)
 	{
-		if (i<10)
-			printf("0");
-		printf("%d|", i);
+		printf("%d", j%10);
+		if (!j)
+		{
+			printf(" ");
+			j = 8;
+		}
 	}
-	printLine(sizeof(T));
-	for (int i = 0; i < sizeof(T); i++, pointer++)
+	printf("\n");
+	pointer += sizeof(T)-1;
+	for (int i = 0; i < sizeof(T); i++, pointer--)
 		PrintBin(*pointer);
 	printLine(sizeof(T));
-	return;
 };
 
 void PrintBin(char number)
 {
-	for (int i = 0; i < 8; i++)
-	{
-		printf(" %d|", (number & 0x01));
-		number >>= 1;
-	}
+	for (int i = 8; i >0; i--)
+		printf("%d", ((number >> i) & 0x01));
+	printf(" ");
 }
 
 void printLine(int MenuPointByte)
 {
 	printf("\n");
-	for (int i = MenuPointByte * 8; i > 0; i--)
-		printf("%s", "---");
+	for (int i = MenuPointByte * 8+3; i > 0; i--)
+		printf("%s", "-");
 	printf("\n");
 }
