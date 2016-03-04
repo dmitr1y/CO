@@ -9,13 +9,16 @@ void PrintBinNumber(T);
 void PrintBin(char);
 void printLine(int);
 bool ChoiseInputType(int );
+
 int MenuPoint = 1;
 
 int main() {
 	system("color F0");
-	int isExit = 1;//flag to exit program
+	int isExit = 1;//flag to exit: 1->continue, 0->exit
 	PrintMenu(1);//init menu
-	char symbol = _getch();
+	//char symbol = _getch();
+	char symbol;
+	//fflush(stdin);
 	while (isExit && (symbol = _getch()))
 	{
 		system("cls");
@@ -42,7 +45,14 @@ int main() {
 			break;
 		case 13:
 			//enter
-			isExit = ChoiseInputType(MenuPoint);
+			try {
+				isExit = ChoiseInputType(MenuPoint);
+			}
+			catch (int errCode) {
+				printf("ERR(%d): Invalid input \n", errCode);
+				while (getchar() != '\n'){}
+				printf("Flush stdin\n");
+			}
 			break;
 		default:
 			break;
@@ -55,75 +65,75 @@ int main() {
 void PrintMenu(int number)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	cout << "===============================" << endl
-		<< ":::::::::::::MENU::::::::::::::" << endl
-		<< "===============================" << endl;
+	printf("%s%s%s","===============================\n",
+		":::::::::::::MENU::::::::::::::\n",
+			"===============================\n");
 	switch (number)
 	{
 	case 1:
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		cout << "-> " << "1 - int" << endl;
+		printf("%s","-> 1 - int\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout << "|| " << "2 - char" << endl
-			<< "|| " << "3 - float" << endl
-			<< "|| " << "4 - double" << endl
-			<< "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl;
+		printf("%s%s%s%s%s","|| 2 - char\n",
+			"|| 3 - float\n",
+			"|| 4 - double\n",
+			"|| 5 - long\n",
+			"|| 6 - exit\n");
 		break;
 	case 2:
-		cout << "|| " << "1 - int" << endl;
+		printf("%s","|| 1 - int\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		cout << "-> " << "2 - char" << endl;
+		printf("%s", "-> 2 - char\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout << "|| " << "3 - float" << endl
-			<< "|| " << "4 - double" << endl
-			<< "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl;
+		printf("%s%s%s%s", "|| 3 - float\n",
+			"|| 4 - double\n",
+			"|| 5 - long\n",
+			"|| 6 - exit\n");
 		break;
 	case 3:
-		cout << "|| " << "1 - int" << endl
-			<< "|| " << "2 - char" << endl;
+		printf("%s%s", "|| 1 - int\n",
+			"|| 2 - char\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		cout << "-> " << "3 - float" << endl;
+		printf("%s", "-> 3 - float\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout << "|| " << "4 - double" << endl
-			<< "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl;
+		printf("%s%s%s", "|| 4 - double\n",
+			"|| 5 - long\n",
+			"|| 6 - exit\n");
 		break;
 	case 4:
-		cout << "|| " << "1 - int" << endl
-			<< "|| " << "2 - char" << endl
-			<< "|| " << "3 - float" << endl;
+		printf("%s%s%s", "|| 1 - int\n",
+			"|| 2 - char\n",
+			 "|| 3 - float\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		cout << "-> " << "4 - double" << endl;
+		printf("%s", "-> 4 - double\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout << "|| " << "5 - long" << endl
-			<< "|| " << "6 - exit" << endl;
+		printf("%s%s", "|| 5 - long\n",
+			"|| 6 - exit\n");
 		break;
 	case 5:
-		cout << "|| " << "1 - int" << endl
-			<< "|| " << "2 - char" << endl
-			<< "|| " << "3 - float" << endl
-			<< "|| " << "4 - double" << endl;
+		printf("%s%s%s%s", "|| 1 - int\n",
+			"|| 2 - char\n",
+			"|| 3 - float\n",
+			"|| 4 - double\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		cout << "-> " << "5 - long" << endl;
+		printf("%s", "-> 5 - long\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		cout << "|| " << "6 - exit" << endl;
+		printf("%s", "|| 6 - exit\n");
 		break;
 	case 6:
-		cout << "|| " << "1 - int" << endl
-			<< "|| " << "2 - char" << endl
-			<< "|| " << "3 - float" << endl
-			<< "|| " << "4 - double" << endl
-			<< "|| " << "5 - long" << endl;
+		printf("%s%s%s%s%s", "|| 1 - int\n",
+			"|| 2 - char\n",
+			"|| 3 - float\n",
+			"|| 4 - double\n",
+			"|| 5 - long\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		cout << "-> " << "6 - exit" << endl;
+		printf("%s", "-> 6 - exit\n");
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		break;
 	default:
 		break;
 	}
-	cout << "===============================" << endl;
+	printf("%s", "===============================\n");
 }
 
 bool ChoiseInputType(int param)
@@ -137,28 +147,33 @@ bool ChoiseInputType(int param)
 	switch (param)
 	{
 	case 1:
-		cout << "int: ";
-		scanf("%d", &a);
+		printf("int: ");
+		if (!scanf("%d", &a))
+			throw 1;
 		PrintBinNumber(a);
 		break;
 	case 2:
-		cout << "char: ";
-		scanf("%c", &b);
+		printf("char: ");
+		if(!scanf("%c", &b))
+			throw 1;
 		PrintBinNumber(b);
 		break;
 	case 3:
-		cout << "float: ";
-		scanf("%f", &c);
+		printf("float: ");
+		if(!scanf("%f", &c))
+			throw 1;
 		PrintBinNumber(c);
 		break;
 	case 4:
-		cout << "double: ";
-		scanf("%f", &d);
+		printf("double: ");
+		if(!scanf("%f", &d))
+			throw 1;
 		PrintBinNumber(d);
 		break;
 	case 5:
-		cout << "long: ";
-		scanf("%d", &e);
+		printf("long: ");
+		if(!scanf("%d", &e))
+			throw 1;
 		PrintBinNumber(e);
 		break;
 	case 6:
@@ -175,13 +190,13 @@ template<typename T>
 void PrintBinNumber(const T arg)
 {
 	char *pointer = (char*)&arg;	
-	cout << "size: " << sizeof(T) << "bytes" << endl;
+	printf("size: %d bytes \n" ,sizeof(T));
 	printLine(sizeof(T));
 	for (int i = 0; i < sizeof(T) * 8; i++)
 	{
 		if (i<10)
-			cout << "0";
-		cout << i << "|";
+			printf("0");
+		printf("%d|", i);
 	}
 	printLine(sizeof(T));
 	for (int i = 0; i < sizeof(T); i++, pointer++)
@@ -194,15 +209,15 @@ void PrintBin(char number)
 {
 	for (int i = 0; i < 8; i++)
 	{
-		cout << " " << (number & 0x01) << "|";
+		printf(" %d|", (number & 0x01));
 		number >>= 1;
 	}
 }
 
 void printLine(int MenuPointByte)
 {
-	cout << endl;
+	printf("\n");
 	for (int i = MenuPointByte * 8; i > 0; i--)
-		cout << "---";
-	cout << endl;
+		printf("%s", "---");
+	printf("\n");
 }
