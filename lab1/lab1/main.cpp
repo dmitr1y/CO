@@ -2,20 +2,19 @@
 #include <conio.h>
 #include <Windows.h>
 
-using namespace std;
 void PrintMenu(int);
 template <typename T>
 void PrintBinNumber(T);
 void PrintBin(char);
 void printLine(int);
-bool ChoiseInputType(int );
+bool ChoiseInputType(int);
+void printErrDescrp(int);
 
 int MenuPoint = 1;
 
 int main() {
 	system("color F0");
-	int isExit = 1;//flag to exit: 1->continue, 0->exit
-//	system("cls");
+	int isExit = 1;//flag to exit: 1->continue, 0->exit	
 	PrintMenu(1);//init menu
 	char symbol;
 	while ((isExit!=0) && ((symbol = _getch())!=0))
@@ -47,11 +46,15 @@ int main() {
 			try {
 				isExit = ChoiseInputType(MenuPoint);
 			}
-			catch (int errCode) {
-				printf("ERR(%d): Invalid input \n", errCode);
+			catch (int errCode) {			
+				printErrDescrp(errCode);
 				while (getchar() != '\n'){}
 				printf("Flush stdin\n");
 			}
+			break;
+		case 27:
+			//esc
+			isExit = 0;
 			break;
 		default:
 			break;
@@ -167,7 +170,6 @@ bool ChoiseInputType(int param)
 		printf("double: ");
 		if(!scanf("%lf", &d))
 			throw 1;
-		printf("%lf", d);
 		PrintBinNumber(d);
 		break;
 	case 5:
@@ -181,6 +183,7 @@ bool ChoiseInputType(int param)
 		return false;
 		break;
 	default:
+		throw 2;
 		break;
 	}
 	return true;
@@ -210,7 +213,7 @@ void PrintBinNumber(const T arg)
 
 void PrintBin(char number)
 {
-	for (int i = 8; i >0; i--)
+	for (int i = 7; i >=0; i--)
 		printf("%d", ((number >> i) & 0x01));
 	printf(" ");
 }
@@ -221,4 +224,22 @@ void printLine(int MenuPointByte)
 	for (int i = MenuPointByte * 8+3; i > 0; i--)
 		printf("%s", "-");
 	printf("\n");
+}
+
+void printErrDescrp(int errCode)
+{
+	printf("ERROR CODE: %d [",errCode);
+	switch (errCode)
+	{
+	case 1:
+		printf("%s", "invalid input");
+		break;
+	case 2:
+		printf("%s", "incorrect choice");
+		break;
+	default:
+		printf("%s", "unknown");
+		break;
+	}
+	printf("%s", "]\n");
 }
