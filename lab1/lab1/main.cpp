@@ -619,7 +619,7 @@ void printSubColorMenu(int param)
 	switch (param)
 	{
 	case 1:	SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-		printf("%s", " ->sign<- ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
+		printf("%s", "->sign<- ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
 		printf("%s", " order "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
 		printf("%s", " mantissa");
 		break;
