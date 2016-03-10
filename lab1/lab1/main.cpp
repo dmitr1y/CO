@@ -76,12 +76,11 @@ int main() {
 			try {
 				isExit = ChoiseInputType(MenuPoint);
 			}
-			catch (int errCode) {			
-				printErrDescrp(errCode);
-				while (getchar() != '\n'){}
-			//	fflush(stdin);
-				printf("Flush stdin\n");
+			catch (int errCode) {						
+				printErrDescrp(errCode);				
 			}
+			printf("Flush stdin\n");
+			while (getchar() != '\n');		
 			break;
 		case 27:
 			//esc
