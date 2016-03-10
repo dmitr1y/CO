@@ -2,19 +2,13 @@
 #include <conio.h>
 #include <Windows.h>
 
-struct binColor
+struct binNumber
 {
 	int sign;
 	int mantiss;
 	int order;
 };
 
-struct bitPos
-{
-	int sign;
-	int mantiss;
-	int order;
-};
 
 
 void PrintMenu(int);
@@ -25,14 +19,14 @@ bool ChoiseInputType(int);
 void printErrDescrp(int);
 int colorForBin(int , int );
 void colorMenu();
-void changeColor(bitPos, int);
+void changeColor(binNumber, int);
 void printColorMenu(int,int);
 bool ChoiseColor(int);
 void printSubColorMenu(int);
 
-bitPos posInt, posFloat, posDouble, posLong;
+binNumber posInt, posFloat, posDouble, posLong;
 int MenuPoint = 1;
-binColor color;
+binNumber color;
 
 int main() {
 	posInt.sign = 31;
@@ -85,6 +79,7 @@ int main() {
 			catch (int errCode) {			
 				printErrDescrp(errCode);
 				while (getchar() != '\n'){}
+			//	fflush(stdin);
 				printf("Flush stdin\n");
 			}
 			break;
@@ -103,6 +98,7 @@ int main() {
 void PrintMenu(int number)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	system("cls");
 	printf("%s%s%s","===============================\n",
 		":::::::::::::MENU::::::::::::::\n",
 			"===============================\n");
@@ -212,30 +208,35 @@ bool ChoiseInputType(int param)
 		printf("int: ");
 		if (!scanf("%d", &a))
 			throw 1;
+		printf("readed: %d\n", a);
 		PrintBinNumber(a,param);
 		break;
 	case 2:
 		printf("char: ");
 		if(!scanf("%c", &b))
 			throw 1;
+		printf("readed: %c\n", b);
 		PrintBinNumber(b, param);
 		break;
 	case 3:
 		printf("float: ");
 		if(!scanf("%f", &c))
 			throw 1;
+		printf("readed: %f\n", c);
 		PrintBinNumber(c, param);
 		break;
 	case 4:
 		printf("double: ");
 		if(!scanf("%lf", &d))
 			throw 1;
+		printf("readed: %lf\n", d);
 		PrintBinNumber(d, param);
 		break;
 	case 5:
 		printf("long: ");
 		if(!scanf("%d", &e))
 			throw 1;
+		printf("readed: %d\n", e);
 		PrintBinNumber(e, param);
 		break;
 	case 6:
@@ -249,6 +250,7 @@ bool ChoiseInputType(int param)
 		throw 2;
 		break;
 	}
+	system("pause");
 	return true;
 }
 
@@ -315,6 +317,7 @@ void printErrDescrp(int errCode)
 		break;
 	}
 	printf("%s", "]\n");
+	system("pause");
 }
 
 int colorForBin(int typeID, int count)
@@ -343,7 +346,7 @@ int colorForBin(int typeID, int count)
 	return 0;
 }
 
-void changeColor(bitPos pos, int count)
+void changeColor(binNumber pos, int count)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (count==pos.sign)
