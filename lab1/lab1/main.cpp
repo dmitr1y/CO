@@ -13,7 +13,7 @@ struct binNumber
 
 void PrintMenu(int);
 template <typename T>
-void PrintBinNumber(T, int);
+T PrintBinNumber(T, int, int,int);
 void printLine(int);
 bool ChoiseInputType(int);
 void printErrDescrp(int);
@@ -40,10 +40,7 @@ int main() {
 	posFloat.mantiss = 22;
 	posLong = posInt;
 	color.mantiss = color.order = color.sign = 15;//default color: black
-
 	system("color F0");
-	
-
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
 	PrintMenu(1);//init menu
 	char symbol;
@@ -79,7 +76,7 @@ int main() {
 			catch (int errCode) {						
 				printErrDescrp(errCode);				
 			}
-			printf("Flush stdin\n");
+			//printf("Flush stdin\n");
 			while (getchar() != '\n');		
 			break;
 		case 27:
@@ -195,12 +192,15 @@ bool ChoiseInputType(int param)
 	4-double
 	5-long
 	*/
+	int startPos, endPos;
+	startPos = endPos = -1;//default
 	int a;
 	char b;
 	float c;
 	double d;
 	long e;
 	PrintMenu(MenuPoint);
+	int x;
 	switch (param)
 	{
 	case 1:
@@ -208,35 +208,37 @@ bool ChoiseInputType(int param)
 		if (!scanf("%d", &a))
 			throw 1;
 		printf("readed: %d\n", a);
-		PrintBinNumber(a,param);
+		x = PrintBinNumber(a, param, startPos, endPos);
+		std::cout << "CHANGED:" << x << "\n";
+		PrintBinNumber(x, param, startPos, endPos);
 		break;
 	case 2:
 		printf("char: ");
 		if(!scanf("%c", &b))
 			throw 1;
 		printf("readed: %c\n", b);
-		PrintBinNumber(b, param);
+		PrintBinNumber(b, param, startPos, endPos);
 		break;
 	case 3:
 		printf("float: ");
 		if(!scanf("%f", &c))
 			throw 1;
 		printf("readed: %f\n", c);
-		PrintBinNumber(c, param);
+		PrintBinNumber(c, param, startPos, endPos);
 		break;
 	case 4:
 		printf("double: ");
 		if(!scanf("%lf", &d))
 			throw 1;
 		printf("readed: %lf\n", d);
-		PrintBinNumber(d, param);
+		PrintBinNumber(d, param, startPos, endPos);
 		break;
 	case 5:
 		printf("long: ");
 		if(!scanf("%d", &e))
 			throw 1;
 		printf("readed: %d\n", e);
-		PrintBinNumber(e, param);
+		PrintBinNumber(e, param, startPos, endPos);
 		break;
 	case 6:
 		colorMenu();
@@ -254,7 +256,7 @@ bool ChoiseInputType(int param)
 }
 
 template<typename T>
-void PrintBinNumber(const T arg, int typeID)
+T PrintBinNumber(const T arg, int typeID, int startPos, int endPos)
 {
 	/* TypeID:
 	1-int
@@ -262,9 +264,21 @@ void PrintBinNumber(const T arg, int typeID)
 	3-float
 	4-double
 	5-long
-	*/
-	
+	*/	
 	char *pointer = (char*)&arg;	
+	if (startPos==-1 && endPos==-1)
+	{
+		//nothing to do
+	}
+	else
+	{
+		if (startPos<0 || endPos>(8*sizeof(T)-1))
+		{
+			//ERR: bad value
+		}
+		//change from to on state:
+		printf("%s", "change on: ");
+	}
 	printf("size: %d bytes \n" ,sizeof(T));
 	printLine(sizeof(T));
 	for (int i = sizeof(T) * 8-1, j=7; i >=0 ; i--, j--)
@@ -284,12 +298,21 @@ void PrintBinNumber(const T arg, int typeID)
 		{
 			colorForBin(typeID, count);
 			printf("%d", (((*pointer) >> j) & 0x01));
+			if (!(((*pointer) >> j) & 0x01))
+			{
+				(*pointer) |= 0x01<<j;
+			}
+			else
+			{
+				(*pointer) ^= 0x01 << j;
+			}
 		}
 		printf(" ");
 	}
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	printLine(sizeof(T));
+	return arg;
 };
 
 void printLine(int MenuPointByte)
@@ -341,7 +364,6 @@ int colorForBin(int typeID, int count)
 	default:
 		break;
 	}
-
 	return 0;
 }
 
@@ -349,17 +371,11 @@ void changeColor(binNumber pos, int count)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (count==pos.sign)
-	{
 		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-	}
 	if (count<=pos.order && count >pos.mantiss)
-	{
 		SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-	}
 	if (count <= pos.mantiss && count >= 0)
-	{
 		SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
-	}
 }
 
 void colorMenu()
@@ -367,8 +383,7 @@ void colorMenu()
 	int MenuID = 1;
 	int isExit = 1;	
 	int SubID = 1;
-	char symbol;
-	
+	char symbol;	
 	printColorMenu(1,1);	
 	//symbol = _getch();
 	while ((isExit != 0) && ((symbol = _getch()) != 0))
@@ -610,7 +625,6 @@ bool ChoiseColor(int param)
 		return false;
 		break;
 	}
-
 	return true;
 }
 
