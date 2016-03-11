@@ -1,6 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <Windows.h>
+#include <iomanip>
 
 struct binNumber
 {
@@ -9,11 +10,16 @@ struct binNumber
 	int order;
 };
 
-
+//if (GetAsyncKeyState(VK_SHIFT)&&GetAsyncKeyState(VK_F1))
+//{
+//	std::cout << "SHIFT + F1" << "\n";
+//}
 
 void PrintMenu(int);
 template <typename T>
-T PrintBinNumber(T, int, int,int);
+T PrintBinNumber(T, int, int,bool);
+template <typename T>
+T choiseBinMenu(T, int);
 void printLine(int);
 bool ChoiseInputType(int);
 void printErrDescrp(int);
@@ -23,9 +29,11 @@ void changeColor(binNumber, int);
 void printColorMenu(int,int);
 bool ChoiseColor(int);
 void printSubColorMenu(int);
+void setMenuColor(int, int);
 
 binNumber posInt, posFloat, posDouble, posLong;
 int MenuPoint = 1;
+int binMenuID = 0;
 binNumber color;
 
 int main() {
@@ -192,15 +200,12 @@ bool ChoiseInputType(int param)
 	4-double
 	5-long
 	*/
-	int startPos, endPos;
-	startPos = endPos = -1;//default
 	int a;
 	char b;
 	float c;
 	double d;
 	long e;
 	PrintMenu(MenuPoint);
-	int x;
 	switch (param)
 	{
 	case 1:
@@ -208,37 +213,35 @@ bool ChoiseInputType(int param)
 		if (!scanf("%d", &a))
 			throw 1;
 		printf("readed: %d\n", a);
-		x = PrintBinNumber(a, param, startPos, endPos);
-		std::cout << "CHANGED:" << x << "\n";
-		PrintBinNumber(x, param, startPos, endPos);
+		a = choiseBinMenu(a, param);
 		break;
 	case 2:
 		printf("char: ");
-		if(!scanf("%c", &b))
+		if (!scanf("%c", &b))
 			throw 1;
 		printf("readed: %c\n", b);
-		PrintBinNumber(b, param, startPos, endPos);
+		a = choiseBinMenu(b, param);
 		break;
 	case 3:
 		printf("float: ");
-		if(!scanf("%f", &c))
+		if (!scanf("%f", &c))
 			throw 1;
 		printf("readed: %f\n", c);
-		PrintBinNumber(c, param, startPos, endPos);
+		a = choiseBinMenu(c, param);
 		break;
 	case 4:
 		printf("double: ");
-		if(!scanf("%lf", &d))
+		if (!scanf("%lf", &d))
 			throw 1;
 		printf("readed: %lf\n", d);
-		PrintBinNumber(d, param, startPos, endPos);
+		a = choiseBinMenu(d, param);
 		break;
 	case 5:
 		printf("long: ");
-		if(!scanf("%d", &e))
+		if (!scanf("%d", &e))
 			throw 1;
 		printf("readed: %d\n", e);
-		PrintBinNumber(e, param, startPos, endPos);
+		a = choiseBinMenu(e, param);
 		break;
 	case 6:
 		colorMenu();
@@ -251,12 +254,56 @@ bool ChoiseInputType(int param)
 		throw 2;
 		break;
 	}
-	system("pause");
+	//system("pause");
 	return true;
+
 }
 
 template<typename T>
-T PrintBinNumber(const T arg, int typeID, int startPos, int endPos)
+T choiseBinMenu(T number, int param)
+{
+	int isExit = 1;
+	char symbol;
+	bool isInverse = false;
+	int binSize;
+	binSize = sizeof(number) * 8;
+	binMenuID = binSize - 1;
+	PrintBinNumber(number, param, binSize - 1, false);
+	while ((isExit != 0) && ((symbol = _getch()) != 0))
+	{
+		isInverse = false;
+		system("cls");
+		switch (symbol) {
+		case 75:
+			//left
+			binMenuID++;
+			if (binMenuID > (binSize - 1))
+				binMenuID = 0;
+			break;
+		case 77:
+			//right
+			binMenuID--;
+			if (binMenuID < 0)
+				binMenuID = binSize - 1;;
+			break;
+		case 13:
+			//enter
+			isInverse = true;
+			break;
+		case 27:
+			//esc
+			isExit = 0;
+			break;
+		default:
+			break;
+		}
+		number = PrintBinNumber(number, param, binMenuID, isInverse);
+	}
+	return number;
+};
+
+template<typename T>
+T PrintBinNumber(const T arg, int typeID, int startPos, bool isInverse)
 {
 	/* TypeID:
 	1-int
@@ -265,20 +312,11 @@ T PrintBinNumber(const T arg, int typeID, int startPos, int endPos)
 	4-double
 	5-long
 	*/	
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	binNumber menuPos;
+	menuPos.order = menuPos.mantiss = -1;
+	menuPos.sign = startPos;
 	char *pointer = (char*)&arg;	
-	if (startPos==-1 && endPos==-1)
-	{
-		//nothing to do
-	}
-	else
-	{
-		if (startPos<0 || endPos>(8*sizeof(T)-1))
-		{
-			//ERR: bad value
-		}
-		//change from to on state:
-		printf("%s", "change on: ");
-	}
 	printf("size: %d bytes \n" ,sizeof(T));
 	printLine(sizeof(T));
 	for (int i = sizeof(T) * 8-1, j=7; i >=0 ; i--, j--)
@@ -292,28 +330,23 @@ T PrintBinNumber(const T arg, int typeID, int startPos, int endPos)
 	}
 	printf("\n");
 	pointer += sizeof(T)-1;
-	for (int i = 0,count= sizeof(T)*8-1; i < sizeof(T); i++, pointer--)
+	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
 	{
 		for (int j = 7; j >= 0; j--, count--)
 		{
-			colorForBin(typeID, count);
-			printf("%d", (((*pointer) >> j) & 0x01));
-			if (!(((*pointer) >> j) & 0x01))
-			{
-				(*pointer) |= 0x01<<j;
-			}
-			else
-			{
+			setMenuColor(count, typeID);
+			if (isInverse == true && binMenuID == count)
 				(*pointer) ^= 0x01 << j;
-			}
+			printf("%d", (((*pointer) >> j) & 0x01));
 		}
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		printf(" ");
 	}
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	printLine(sizeof(T));
+	std::cout << "NUMBER: " << std::setprecision(5000) <<arg<< "\n";
 	return arg;
-};
+}
 
 void printLine(int MenuPointByte)
 {
@@ -370,12 +403,22 @@ int colorForBin(int typeID, int count)
 void changeColor(binNumber pos, int count)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	if (count==pos.sign)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
 	if (count<=pos.order && count >pos.mantiss)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
 	if (count <= pos.mantiss && count >= 0)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
+}
+
+void setMenuColor(int pos, int typeID)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (pos== binMenuID)
+		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
+	else
+		colorForBin(typeID, pos);
 }
 
 void colorMenu()
