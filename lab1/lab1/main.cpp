@@ -10,6 +10,19 @@ struct binNumber
 	int order;
 };
 
+enum keybordKeys
+{
+	escape=27,
+	enter=13,
+	left=75,
+	right=77,
+	up=72,
+	down=80,
+	home=71,
+	end=79
+};
+
+
 //if (GetAsyncKeyState(VK_SHIFT)&&GetAsyncKeyState(VK_F1))
 //{
 //	std::cout << "SHIFT + F1" << "\n";
@@ -51,54 +64,38 @@ int main() {
 	color.mantissa = color.order = color.sign = 15;//default color: black
 	system("color F0");
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
-	try {
-		printMainMenu(1);//init menu
-	}
-	catch (int errID) {
-		printErrorDescrption(errID);
-	}
-	char symbol;
-	while ((isExit!=0) && ((symbol = _getch())!=0))
+	printMainMenu(1);//init menu
+	char readedChar;
+	while ((isExit != 0) && ((readedChar = _getch()) != 0))
 	{
-		system("cls");
-		switch (symbol) {
-		case 71:
-			//home
-			mainMenuID = 1;
-			break;
-		case 79:
-			//end
-			mainMenuID = 7;
-			break;
-		case 72:
-			//up
-			mainMenuID--;
-			if (mainMenuID < 1)
-				mainMenuID = 7;
-			break;
-		case 80:
-			//down
-			mainMenuID++;
-			if (mainMenuID > 7)
-				mainMenuID = 1;
-			break;
-		case 13:
-			//enter
-			try {
-				isExit = choiseInputType(mainMenuID);
-			}
-			catch (int errID) {						
-				printErrorDescrption(errID);				
-			}			
-			break;
-		case 27:
-			//esc
-			isExit = 0;
-			break;
-		default:
-			break;
-		}
 		try {
+			switch (readedChar) {
+			case home:
+				mainMenuID = 1;
+				break;
+			case end:
+				mainMenuID = 7;
+				break;
+			case up:
+				mainMenuID--;
+				if (mainMenuID < 1)
+					mainMenuID = 7;
+				break;
+			case down:
+				mainMenuID++;
+				if (mainMenuID > 7)
+					mainMenuID = 1;
+				break;
+			case enter:
+				isExit = choiseInputType(mainMenuID);
+				break;
+			case escape:
+				isExit = 0;
+				break;
+			default:
+				break;
+			}
+			system("cls");
 			printMainMenu(mainMenuID);
 		}
 		catch (int errID) {
@@ -260,7 +257,6 @@ bool choiseInputType(int param)
 	case 7:
 		//exit
 		return false;
-		break;
 	default:
 		throw 2;
 		break;
@@ -272,35 +268,31 @@ template<typename T>
 T choiseBinMenu(T number, int param)
 {
 	int isExit = 1;
-	char symbol;
+	char readedChar;
 	bool isInverse = false;
 	int binSize;
 	binSize = sizeof(number) * 8;
 	binMenuID = binSize - 1;
 	printBinNumber(number, param, binSize - 1, false);
-	while ((isExit != 0) && ((symbol = _getch()) != 0))
+	while ((isExit != 0) && ((readedChar = _getch()) != 0))
 	{
 		isInverse = false;
 		system("cls");
-		switch (symbol) {
-		case 75:
-			//left
+		switch (readedChar) {
+		case left:
 			binMenuID++;
 			if (binMenuID > (binSize - 1))
 				binMenuID = 0;
 			break;
-		case 77:
-			//right
+		case right:
 			binMenuID--;
 			if (binMenuID < 0)
 				binMenuID = binSize - 1;;
 			break;
-		case 13:
-			//enter
+		case enter:
 			isInverse = true;
 			break;
-		case 27:
-			//esc
+		case escape:
 			isExit = 0;
 			break;
 		default:
@@ -359,10 +351,10 @@ void printBitNumbers(int typeSize)
 	printf("\n");
 }
 
-void printLine(int mainMenuIDByte)
+void printLine(int bytesCount)
 {
 	printf("\n");
-	for (int i = mainMenuIDByte * 8+3; i > 0; i--)
+	for (int i = bytesCount * 8+bytesCount; i > 0; i--)
 		printf("%s", "-");
 	printf("\n");
 }
@@ -447,93 +439,75 @@ void setMenuColor(int pos, int typeID)
 
 void colorMenu()
 {
-	int MenuID = 1;
-	int isExit = 1;	
-	int SubID = 1;
+	int colorMenuID = 1;
+	int isExit = 1;
+	int subColorMenuID = 1;
 	int tmp;
-	char symbol;	
-	try {
-		printColorMenu(1, 1);
-		while ((isExit != 0) && ((symbol = _getch()) != 0))
-		{
-			system("cls");
-			switch (symbol) {
-			case 75:
-				//left
-				SubID--;
-				if (SubID < 1)
-					SubID = 3;
+	char readedChar;
+	printColorMenu(1, 1);
+	while ((isExit != 0) && ((readedChar = _getch()) != 0))
+	{
+		system("cls");
+		switch (readedChar) {
+		case left:
+			subColorMenuID--;
+			if (subColorMenuID < 1)
+				subColorMenuID = 3;
+			break;
+		case right:
+			subColorMenuID++;
+			if (subColorMenuID > 3)
+				subColorMenuID = 1;
+			break;
+		case home:
+			colorMenuID = 1;
+			break;
+		case end:
+			colorMenuID = 6;
+			break;
+		case up:
+			colorMenuID--;
+			if (colorMenuID < 1)
+				colorMenuID = 6;
+			break;
+		case down:
+			colorMenuID++;
+			if (colorMenuID > 6)
+				colorMenuID = 1;
+			break;
+		case enter:
+			switch (subColorMenuID)
+			{
+			case 2:
+				tmp = colorMenuID + 10;
 				break;
-			case 77:
-				//right
-				SubID++;
-				if (SubID > 3)
-					SubID = 1;
-				break;
-			case 71:
-				//home
-				MenuID = 1;
-				break;
-			case 79:
-				//end
-				MenuID = 6;
-				break;
-			case 72:
-				//up
-				MenuID--;
-				if (MenuID < 1)
-					MenuID = 6;
-				break;
-			case 80:
-				//down
-				MenuID++;
-				if (MenuID > 6)
-					MenuID = 1;
-				break;
-			case 13:
-				//enter					
-					switch (SubID)
-					{
-					case 2:
-						tmp = MenuID + 10;
-						break;
-					case 3:
-						tmp = MenuID + 20;
-						break;
-					default:
-						tmp = MenuID;
-						break;
-					}
-					isExit = choiseColor(tmp);	
-				break;
-			case 27:
-				//esc
-				isExit = 0;
+			case 3:
+				tmp = colorMenuID + 20;
 				break;
 			default:
+				tmp = colorMenuID;
 				break;
 			}
-			printColorMenu(MenuID, SubID);
+			isExit = choiseColor(tmp);
+			break;
+		case escape:
+			isExit = 0;
+			break;
+		default:
+			break;
 		}
-	}
-	catch (int errID) {
-		printErrorDescrption(errID);
+		printColorMenu(colorMenuID, subColorMenuID);
 	}
 }
 
-void printColorMenu(int menuID,int subID)
+void printColorMenu(int menuID,int subColorMenuID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	system("cls");
 	printf("%s%s%s", "===============================\n",
 		"::::::::::COLOR MENU:::::::::::\n",
 		"===============================\n");
-	try {
-		printSubColorMenu(subID);
-	}
-	catch(int errID) {
-		printErrorDescrption(errID);
-	}
+	printSubColorMenu(subColorMenuID);
 	switch (menuID)
 	{
 	case 1:
