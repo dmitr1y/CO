@@ -6,7 +6,7 @@
 struct binNumber
 {
 	int sign;
-	int mantiss;
+	int mantissa;
 	int order;
 };
 
@@ -15,42 +15,48 @@ struct binNumber
 //	std::cout << "SHIFT + F1" << "\n";
 //}
 
-void PrintMenu(int);
+void printMainMenu(int);
 template <typename T>
-T PrintBinNumber(T, int, int,bool);
+T printBinNumber(T, int, int, bool);
 template <typename T>
 T choiseBinMenu(T, int);
 void printLine(int);
-bool ChoiseInputType(int);
-void printErrDescrp(int);
-int colorForBin(int , int );
+void printBitNumbers(int);
+bool choiseInputType(int);
+void printErrorDescrption(int);
+int setColorForTypes(int, int);
 void colorMenu();
-void changeColor(binNumber, int);
-void printColorMenu(int,int);
-bool ChoiseColor(int);
+void setNumberColor(binNumber, int);
+void printColorMenu(int, int);
+bool choiseColor(int);
 void printSubColorMenu(int);
 void setMenuColor(int, int);
 
-binNumber posInt, posFloat, posDouble, posLong;
-int MenuPoint = 1;
-int binMenuID = 0;
-binNumber color;
+binNumber posInt, posFloat, posDouble, posLong;//position sign,order & mantissa for different types
+int mainMenuID = 1; //initial 1 point of Main menu
+int binMenuID = 0;//initial 0 for bits number
+binNumber color; //colors for sign,order & mantissa
 
 int main() {
 	posInt.sign = 31;
 	posInt.order = 30;
-	posInt.mantiss = -1;
+	posInt.mantissa = -1;
 	posDouble.sign = 63;
 	posDouble.order = 62;
-	posDouble.mantiss = 51;
+	posDouble.mantissa = 51;
 	posFloat.sign = 31;
 	posFloat.order = 30;
-	posFloat.mantiss = 22;
+	posFloat.mantissa = 22;
 	posLong = posInt;
-	color.mantiss = color.order = color.sign = 15;//default color: black
+	color.mantissa = color.order = color.sign = 15;//default color: black
 	system("color F0");
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
-	PrintMenu(1);//init menu
+	try {
+		printMainMenu(1);//init menu
+	}
+	catch (int errID) {
+		printErrorDescrption(errID);
+	}
 	char symbol;
 	while ((isExit!=0) && ((symbol = _getch())!=0))
 	{
@@ -58,34 +64,32 @@ int main() {
 		switch (symbol) {
 		case 71:
 			//home
-			MenuPoint = 1;
+			mainMenuID = 1;
 			break;
 		case 79:
 			//end
-			MenuPoint = 7;
+			mainMenuID = 7;
 			break;
 		case 72:
 			//up
-			MenuPoint--;
-			if (MenuPoint < 1)
-				MenuPoint = 7;
+			mainMenuID--;
+			if (mainMenuID < 1)
+				mainMenuID = 7;
 			break;
 		case 80:
 			//down
-			MenuPoint++;
-			if (MenuPoint > 7)
-				MenuPoint = 1;
+			mainMenuID++;
+			if (mainMenuID > 7)
+				mainMenuID = 1;
 			break;
 		case 13:
 			//enter
 			try {
-				isExit = ChoiseInputType(MenuPoint);
+				isExit = choiseInputType(mainMenuID);
 			}
-			catch (int errCode) {						
-				printErrDescrp(errCode);				
-			}
-			//printf("Flush stdin\n");
-			while (getchar() != '\n');		
+			catch (int errID) {						
+				printErrorDescrption(errID);				
+			}			
 			break;
 		case 27:
 			//esc
@@ -94,12 +98,17 @@ int main() {
 		default:
 			break;
 		}
-		PrintMenu(MenuPoint);
+		try {
+			printMainMenu(mainMenuID);
+		}
+		catch (int errID) {
+			printErrorDescrption(errID);
+		}
 	}
 	return 0;
 }
 
-void PrintMenu(int number)
+void printMainMenu(int number)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	system("cls");
@@ -186,12 +195,13 @@ void PrintMenu(int number)
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		break;
 	default:
+		throw 5;
 		break;
 	}
 	printf("%s", "===============================\n");
 }
 
-bool ChoiseInputType(int param)
+bool choiseInputType(int param)
 {
 	/*
 	1-int
@@ -199,13 +209,14 @@ bool ChoiseInputType(int param)
 	3-float
 	4-double
 	5-long
+	6-color menu
 	*/
 	int a;
 	char b;
 	float c;
 	double d;
 	long e;
-	PrintMenu(MenuPoint);
+	printMainMenu(mainMenuID);
 	switch (param)
 	{
 	case 1:
@@ -254,9 +265,7 @@ bool ChoiseInputType(int param)
 		throw 2;
 		break;
 	}
-	//system("pause");
 	return true;
-
 }
 
 template<typename T>
@@ -268,7 +277,7 @@ T choiseBinMenu(T number, int param)
 	int binSize;
 	binSize = sizeof(number) * 8;
 	binMenuID = binSize - 1;
-	PrintBinNumber(number, param, binSize - 1, false);
+	printBinNumber(number, param, binSize - 1, false);
 	while ((isExit != 0) && ((symbol = _getch()) != 0))
 	{
 		isInverse = false;
@@ -297,13 +306,13 @@ T choiseBinMenu(T number, int param)
 		default:
 			break;
 		}
-		number = PrintBinNumber(number, param, binMenuID, isInverse);
+		number = printBinNumber(number, param, binMenuID, isInverse);
 	}
 	return number;
 };
 
 template<typename T>
-T PrintBinNumber(const T arg, int typeID, int startPos, bool isInverse)
+T printBinNumber(const T number, int typeID, int startPos, bool isInverse)
 {
 	/* TypeID:
 	1-int
@@ -313,22 +322,10 @@ T PrintBinNumber(const T arg, int typeID, int startPos, bool isInverse)
 	5-long
 	*/	
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	binNumber menuPos;
-	menuPos.order = menuPos.mantiss = -1;
-	menuPos.sign = startPos;
-	char *pointer = (char*)&arg;	
-	printf("size: %d bytes \n" ,sizeof(T));
+	char *pointer = (char*)&number;	
+	printf("size: %d bytes \n", sizeof(T));
 	printLine(sizeof(T));
-	for (int i = sizeof(T) * 8-1, j=7; i >=0 ; i--, j--)
-	{
-		printf("%d", j%10);
-		if (!j)
-		{
-			printf(" ");
-			j = 8;
-		}
-	}
-	printf("\n");
+	printBitNumbers(sizeof(T));
 	pointer += sizeof(T)-1;
 	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
 	{
@@ -344,28 +341,55 @@ T PrintBinNumber(const T arg, int typeID, int startPos, bool isInverse)
 	}
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	printLine(sizeof(T));
-	std::cout << "NUMBER: " << std::setprecision(5000) <<arg<< "\n";
-	return arg;
+	std::cout << "current number: " << std::setprecision(18) << number << "\n";
+	return number;
 }
 
-void printLine(int MenuPointByte)
+void printBitNumbers(int typeSize)
+{
+	for (int i = typeSize * 8 - 1, j = 7; i >= 0; i--, j--)
+	{
+		printf("%d", j % 10);
+		if (!j)
+		{
+			printf(" ");
+			j = 8;
+		}
+	}
+	printf("\n");
+}
+
+void printLine(int mainMenuIDByte)
 {
 	printf("\n");
-	for (int i = MenuPointByte * 8+3; i > 0; i--)
+	for (int i = mainMenuIDByte * 8+3; i > 0; i--)
 		printf("%s", "-");
 	printf("\n");
 }
 
-void printErrDescrp(int errCode)
+void printErrorDescrption(int errCode)
 {
 	printf("ERROR CODE: %d [",errCode);
 	switch (errCode)
 	{
 	case 1:
-		printf("%s", "invalid input");
+		printf("%s", "invalid input: attempt to flush stdin");
+		while (getchar() != '\n');
 		break;
 	case 2:
 		printf("%s", "incorrect choice");
+		break;
+	case 3:
+		printf("%s", "color not found: setting default color");
+		break;
+	case 4:		
+		printf("%s", "subColorMenu ID not found");
+		break;
+	case 5:
+		printf("%s", "mainMenu ID not found");
+		break;
+	case 6:		
+		printf("%s", "colorMenu ID not found");
 		break;
 	default:
 		printf("%s", "unknown");
@@ -375,24 +399,24 @@ void printErrDescrp(int errCode)
 	system("pause");
 }
 
-int colorForBin(int typeID, int count)
+int setColorForTypes(int typeID, int count)
 {
 	switch (typeID)
 	{
 	case 1:
-		changeColor(posInt, count);
+		setNumberColor(posInt, count);
 		break;
 	case 2:
-		changeColor(posInt, count);
+		setNumberColor(posInt, count);
 		break;
 	case 3:
-		changeColor(posFloat, count);
+		setNumberColor(posFloat, count);
 		break;
 	case 4:
-		changeColor(posDouble, count);
+		setNumberColor(posDouble, count);
 		break;
 	case 5:
-		changeColor(posLong, count);
+		setNumberColor(posLong, count);
 		break;
 	default:
 		break;
@@ -400,16 +424,16 @@ int colorForBin(int typeID, int count)
 	return 0;
 }
 
-void changeColor(binNumber pos, int count)
+void setNumberColor(binNumber pos, int count)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	if (count==pos.sign)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-	if (count<=pos.order && count >pos.mantiss)
+	if (count<=pos.order && count >pos.mantissa)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-	if (count <= pos.mantiss && count >= 0)
-		SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
+	if (count <= pos.mantissa && count >= 0)
+		SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
 }
 
 void setMenuColor(int pos, int typeID)
@@ -418,7 +442,7 @@ void setMenuColor(int pos, int typeID)
 	if (pos== binMenuID)
 		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
 	else
-		colorForBin(typeID, pos);
+		setColorForTypes(typeID, pos);
 }
 
 void colorMenu()
@@ -426,77 +450,74 @@ void colorMenu()
 	int MenuID = 1;
 	int isExit = 1;	
 	int SubID = 1;
+	int tmp;
 	char symbol;	
-	printColorMenu(1,1);	
-	//symbol = _getch();
-	while ((isExit != 0) && ((symbol = _getch()) != 0))
-	{
-		system("cls");
-		switch (symbol) {
-		case 75:
-			//left
-			SubID--;
-			if (SubID < 1)
-				SubID = 3;
-			break;
-		case 77:
-			//right
-			SubID++;
-			if (SubID > 3)
-				SubID = 1;
-			break;
-		case 71:
-			//home
-			MenuID = 1;
-			break;
-		case 79:
-			//end
-			MenuID = 6;
-			break;
-		case 72:
-			//up
-			MenuID--;
-			if (MenuID < 1)
-				MenuID = 6;
-			break;
-		case 80:
-			//down
-			MenuID++;
-			if (MenuID > 6)
+	try {
+		printColorMenu(1, 1);
+		while ((isExit != 0) && ((symbol = _getch()) != 0))
+		{
+			system("cls");
+			switch (symbol) {
+			case 75:
+				//left
+				SubID--;
+				if (SubID < 1)
+					SubID = 3;
+				break;
+			case 77:
+				//right
+				SubID++;
+				if (SubID > 3)
+					SubID = 1;
+				break;
+			case 71:
+				//home
 				MenuID = 1;
-			break;
-		case 13:
-			//enter
-			try {
-				int tmp;
-				switch (SubID)
-				{
-				case 2:
-					tmp = MenuID + 10;
-					break;
-				case 3:
-					tmp = MenuID + 20;
-					break;
-				default:
-					tmp = MenuID;
-					break;
-				}
-				isExit = ChoiseColor(tmp);
+				break;
+			case 79:
+				//end
+				MenuID = 6;
+				break;
+			case 72:
+				//up
+				MenuID--;
+				if (MenuID < 1)
+					MenuID = 6;
+				break;
+			case 80:
+				//down
+				MenuID++;
+				if (MenuID > 6)
+					MenuID = 1;
+				break;
+			case 13:
+				//enter					
+					switch (SubID)
+					{
+					case 2:
+						tmp = MenuID + 10;
+						break;
+					case 3:
+						tmp = MenuID + 20;
+						break;
+					default:
+						tmp = MenuID;
+						break;
+					}
+					isExit = choiseColor(tmp);	
+				break;
+			case 27:
+				//esc
+				isExit = 0;
+				break;
+			default:
+				break;
 			}
-			catch (int errCode) {
-				printErrDescrp(errCode);
-				while (getchar() != '\n') {}
-				printf("Flush stdin\n");
-			}
-			break;
-		case 27:
-			//esc
-			isExit = 0;
-			break;
-		default:
-			break;
+			printColorMenu(MenuID, SubID);
 		}
-		printColorMenu(MenuID, SubID);
+	}
+	catch (int errID) {
+		printErrorDescrption(errID);
 	}
 }
 
@@ -507,7 +528,12 @@ void printColorMenu(int menuID,int subID)
 	printf("%s%s%s", "===============================\n",
 		"::::::::::COLOR MENU:::::::::::\n",
 		"===============================\n");
-	printSubColorMenu(subID);
+	try {
+		printSubColorMenu(subID);
+	}
+	catch(int errID) {
+		printErrorDescrption(errID);
+	}
 	switch (menuID)
 	{
 	case 1:
@@ -595,12 +621,13 @@ void printColorMenu(int menuID,int subID)
 		printf("%s", "MAIN MENU\n");
 		break;
 	default:
+		throw 6;
 		break;
 	}
 	printf("%s", "===============================\n");
 }
 
-bool ChoiseColor(int param)
+bool choiseColor(int param)
 {
 	/*
 	0X-sign
@@ -646,26 +673,26 @@ bool ChoiseColor(int param)
 		return false;
 		break;
 	case 21:
-		color.mantiss = 10;
+		color.mantissa = 10;
 		break;
 	case 22:
-		color.mantiss = 11;
+		color.mantissa = 11;
 		break;
 	case 23:
-		color.mantiss = 12;
+		color.mantissa = 12;
 		break;
 	case 24:
-		color.mantiss = 14;
+		color.mantissa = 14;
 		break;
 	case 25:
-		color.mantiss = 15;
+		color.mantissa = 15;
 		break;
 	case 26:
 		return false;
 		break;
 	default:
-		color.mantiss = color.order=color.sign=15;
-		return false;
+		color.mantissa = color.order=color.sign=15;
+		throw 3;
 		break;
 	}
 	return true;
@@ -679,23 +706,24 @@ void printSubColorMenu(int param)
 	{
 	case 1:	SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
 		printf("%s", "->sign<- ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-		printf("%s", " order "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
+		printf("%s", " order "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
 		printf("%s", " mantissa");
 		break;
 	case 2:
 		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
 		printf("%s", "sign ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-		printf("%s", " ->order<- "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
+		printf("%s", " ->order<- "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
 		printf("%s", " mantissa");
 		break;
 	case 3:
 		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
 		printf("%s", "sign ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
 		printf("%s", " order ");
-		SetConsoleTextAttribute(hConsole, (WORD)((color.mantiss << 4) | 0));
+		SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
 		printf("%s", " ->mantissa<-"); 
 		break;
 	default:
+		throw 4;
 		break;
 	}
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
