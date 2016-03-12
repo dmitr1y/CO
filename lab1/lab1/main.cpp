@@ -221,38 +221,38 @@ bool choiseInputType(int param)
 	{
 	case 1:
 		printf("int: ");
-		if (!scanf("%d", &a))
+		if (!scanf_s("%d", &a))
 			throw 1;
 		printf("readed: %d\n", a);
 		a = choiseBinMenu(a, param);
 		break;
 	case 2:
 		printf("char: ");
-		if (!scanf("%c", &b))
+		if (!scanf_s("%c", &b))
 			throw 1;
 		printf("readed: %c\n", b);
-		a = choiseBinMenu(b, param);
+		b = choiseBinMenu(b, param);
 		break;
 	case 3:
 		printf("float: ");
-		if (!scanf("%f", &c))
+		if (!scanf_s("%f", &c))
 			throw 1;
 		printf("readed: %f\n", c);
-		a = choiseBinMenu(c, param);
+		c = choiseBinMenu(c, param);
 		break;
 	case 4:
 		printf("double: ");
-		if (!scanf("%lf", &d))
+		if (!scanf_s("%lf", &d))
 			throw 1;
 		printf("readed: %lf\n", d);
-		a = choiseBinMenu(d, param);
+		d = choiseBinMenu(d, param);
 		break;
 	case 5:
 		printf("long: ");
-		if (!scanf("%d", &e))
+		if (!scanf_s("%d", &e))
 			throw 1;
 		printf("readed: %d\n", e);
-		a = choiseBinMenu(e, param);
+		e = choiseBinMenu(e, param);
 		break;
 	case 6:
 		colorMenu();
