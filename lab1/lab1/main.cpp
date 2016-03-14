@@ -111,92 +111,21 @@ int main() {
 void printMainMenu(int number)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	char *menuText[] = { "1 - int","2 - char", "3 - float", "4 - double", "5 - long", "6 - change color", "7 - exit" };
 	system("cls");
-	printf("%s%s%s","===============================\n",
+	printf("%s%s%s", "===============================\n",
 		":::::::::::::MENU::::::::::::::\n",
-			"===============================\n");
-	switch (number)
+		"===============================\n");
+	for (int i = 0; i < 7; i++)
 	{
-	case 1:
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s","-> 1 - int\n");
+		if ((number - 1) == i) {
+			printf("->");
+			SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		}
+		else
+			printf("| ");
+		printf("%s\n", menuText[i]);
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s%s%s%s%s%s","|| 2 - char\n",
-			"|| 3 - float\n",
-			"|| 4 - double\n",
-			"|| 5 - long\n",
-			"|| 6 - change color\n",
-			"|| 7 - exit\n");
-		break;
-	case 2:
-		printf("%s","|| 1 - int\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s", "-> 2 - char\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s%s%s%s%s", "|| 3 - float\n",
-			"|| 4 - double\n",
-			"|| 5 - long\n",
-			"|| 6 - change color\n",
-			"|| 7 - exit\n");
-		break;
-	case 3:
-		printf("%s%s", "|| 1 - int\n",
-			"|| 2 - char\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s", "-> 3 - float\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s%s%s%s", "|| 4 - double\n",
-			"|| 5 - long\n",
-			"|| 6 - change color\n",
-			"|| 7 - exit\n");
-		break;
-	case 4:
-		printf("%s%s%s", "|| 1 - int\n",
-			"|| 2 - char\n",
-			 "|| 3 - float\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s", "-> 4 - double\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s%s%s", "|| 5 - long\n",
-			"|| 6 - change color\n",
-			"|| 7 - exit\n");
-		break;
-	case 5:
-		printf("%s%s%s%s", "|| 1 - int\n",
-			"|| 2 - char\n",
-			"|| 3 - float\n",
-			"|| 4 - double\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s", "-> 5 - long\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s%s", "|| 6 - change color\n",
-			"|| 7 - exit\n");
-		break;
-	case 6:
-		printf("%s%s%s%s%s", "|| 1 - int\n",
-			"|| 2 - char\n",
-			"|| 3 - float\n",
-			"|| 4 - double\n",
-			"|| 5 - long\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s", "-> 6 - change color\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 7 - exit\n");
-		break;
-	case 7:
-		printf("%s%s%s%s%s%s", "|| 1 - int\n",
-			"|| 2 - char\n",
-			"|| 3 - float\n",
-			"|| 4 - double\n",
-			"|| 5 - long\n",
-			"|| 6 - change color\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
-		printf("%s", "-> 7 - exit\n");
-		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		break;
-	default:
-		throw 5;
-		break;
 	}
 	printf("%s", "===============================\n");
 }
@@ -521,108 +450,26 @@ void colorMenu()
 	}
 }
 
-void printColorMenu(int menuID,int subID)
+void printColorMenu(int menuID, int subID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	char *menuText[] = { "1 - green","2 - blue", "3 - red", "4 - yellow", "5 - white", "6 - MAIN MENU" };
+	int arrColor[] = { 10,11,12,14,15,15 };
 	system("cls");
 	printf("%s%s%s", "===============================\n",
 		"::::::::::COLOR MENU:::::::::::\n",
 		"===============================\n");
-	try {
-		printSubColorMenu(subID);
-	}
-	catch(int errID) {
-		printErrorDescrption(errID);
-	}
-	switch (menuID)
+	printSubColorMenu(subID);
+	printf("%s", "===============================\n");
+	for (int i = 0; i < 6; i++)
 	{
-	case 1:
-		printf("%s", "-> 1 - ");	SetConsoleTextAttribute(hConsole, (WORD)((10 << 4) | 0));
-		printf("%s", "green\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 2 - "); SetConsoleTextAttribute(hConsole, (WORD)((11 << 4) | 0));
-		printf("%s", "blue\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 3 - "); SetConsoleTextAttribute(hConsole, (WORD)((12 << 4) | 0));
-		printf("%s", "red\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 4 - "); SetConsoleTextAttribute(hConsole, (WORD)((14 << 4) | 0));
-		printf("%s", "yellow\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 5 - "); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "white\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 6 - ");
-		printf("%s", "MAIN MENU\n");
-		break;
-	case 2:
-		printf("%s", "|| 1 - ");	SetConsoleTextAttribute(hConsole, (WORD)((10 << 4) | 0));
-		printf("%s", "green\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "-> 2 - "); SetConsoleTextAttribute(hConsole, (WORD)((11 << 4) | 0));
-		printf("%s", "blue\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 3 - "); SetConsoleTextAttribute(hConsole, (WORD)((12 << 4) | 0));
-		printf("%s", "red\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 4 - "); SetConsoleTextAttribute(hConsole, (WORD)((14 << 4) | 0));
-		printf("%s", "yellow\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 5 - "); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "white\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 6 - ");
-		printf("%s", "MAIN MENU\n");
-		break;
-	case 3:
-		printf("%s", "|| 1 - ");	SetConsoleTextAttribute(hConsole, (WORD)((10 << 4) | 0));
-		printf("%s", "green\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 2 - "); SetConsoleTextAttribute(hConsole, (WORD)((11 << 4) | 0));
-		printf("%s", "blue\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "-> 3 - "); SetConsoleTextAttribute(hConsole, (WORD)((12 << 4) | 0));
-		printf("%s", "red\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 4 - "); SetConsoleTextAttribute(hConsole, (WORD)((14 << 4) | 0));
-		printf("%s", "yellow\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 5 - "); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "white\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 6 - ");
-		printf("%s", "MAIN MENU\n");
-		break;
-	case 4:
-		printf("%s", "|| 1 - ");	SetConsoleTextAttribute(hConsole, (WORD)((10 << 4) | 0));
-		printf("%s", "green\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 2 - "); SetConsoleTextAttribute(hConsole, (WORD)((11 << 4) | 0));
-		printf("%s", "blue\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 3 - "); SetConsoleTextAttribute(hConsole, (WORD)((12 << 4) | 0));
-		printf("%s", "red\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "-> 4 - "); SetConsoleTextAttribute(hConsole, (WORD)((14 << 4) | 0));
-		printf("%s", "yellow\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 5 - "); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "white\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 6 - ");
-		printf("%s", "MAIN MENU\n");
-		break;
-	case 5:
-		printf("%s", "|| 1 - ");	SetConsoleTextAttribute(hConsole, (WORD)((10 << 4) | 0));
-		printf("%s", "green\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 2 - "); SetConsoleTextAttribute(hConsole, (WORD)((11 << 4) | 0));
-		printf("%s", "blue\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 3 - "); SetConsoleTextAttribute(hConsole, (WORD)((12 << 4) | 0));
-		printf("%s", "red\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 4 - "); SetConsoleTextAttribute(hConsole, (WORD)((14 << 4) | 0));
-		printf("%s", "yellow\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "-> 5 - "); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "white\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 6 - ");
-		printf("%s", "MAIN MENU\n");
-		break;
-	case 6:
-		printf("%s", "|| 1 - ");	SetConsoleTextAttribute(hConsole, (WORD)((10 << 4) | 0));
-		printf("%s", "green\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 2 - "); SetConsoleTextAttribute(hConsole, (WORD)((11 << 4) | 0));
-		printf("%s", "blue\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 3 - "); SetConsoleTextAttribute(hConsole, (WORD)((12 << 4) | 0));
-		printf("%s", "red\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 4 - "); SetConsoleTextAttribute(hConsole, (WORD)((14 << 4) | 0));
-		printf("%s", "yellow\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "|| 5 - "); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "white\n"); SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-		printf("%s", "-> 6 - ");
-		printf("%s", "MAIN MENU\n");
-		break;
-	default:
-		throw 6;
-		break;
+		if ((menuID - 1) == i)
+			printf("->");
+		else
+			printf("|");
+		SetConsoleTextAttribute(hConsole, (WORD)((arrColor[i] << 4) | 0));
+		printf("%s\n", menuText[i]);
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	}
 	printf("%s", "===============================\n");
 }
@@ -701,30 +548,20 @@ bool choiseColor(int param)
 void printSubColorMenu(int param)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	char *menuText[] = { "sign","order", "mantissa" };
 	printf("%s", ":::");
-	switch (param)
+	int arrColor[3];
+	arrColor[0] = color.sign;
+	arrColor[1] = color.order;
+	arrColor[2] = color.mantissa;
+	for (int i = 0; i < 3; i++)
 	{
-	case 1:	SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-		printf("%s", "->sign<- ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-		printf("%s", " order "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
-		printf("%s", " mantissa");
-		break;
-	case 2:
-		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-		printf("%s", "sign ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-		printf("%s", " ->order<- "); SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
-		printf("%s", " mantissa");
-		break;
-	case 3:
-		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-		printf("%s", "sign ");	SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
-		printf("%s", " order ");
-		SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
-		printf("%s", " ->mantissa<-"); 
-		break;
-	default:
-		throw 4;
-		break;
+		SetConsoleTextAttribute(hConsole, (WORD)((arrColor[i] << 4) | 0));
+		if ((param - 1) == i)
+			printf("->");
+		printf("%s", menuText[i]);
+		if ((param - 1) == i)
+			printf("<-");
 	}
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	printf("%s", ":::\n");
