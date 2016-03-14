@@ -445,7 +445,7 @@ void printColorMenu(int menuID, int subID)
 		if ((menuID - 1) == i)
 			printf("->");
 		else
-			printf("|");
+			printf("| ");
 		SetConsoleTextAttribute(hConsole, (WORD)((arrColor[i] << 4) | 0));
 		printf("%s\n", menuText[i]);
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
