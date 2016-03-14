@@ -22,12 +22,6 @@ enum keybordKeys
 	end=79
 };
 
-
-//if (GetAsyncKeyState(VK_SHIFT)&&GetAsyncKeyState(VK_F1))
-//{
-//	std::cout << "SHIFT + F1" << "\n";
-//}
-
 void printMainMenu(int);
 template <typename T>
 T printBinNumber(T, int, int, bool);
@@ -41,7 +35,7 @@ int setColorForTypes(int, int);
 void colorMenu();
 void setNumberColor(binNumber, int);
 void printColorMenu(int, int);
-bool choiseColor(int);
+bool choiseColor(int, int);
 void printSubColorMenu(int);
 void setMenuColor(int, int);
 
@@ -105,17 +99,17 @@ int main() {
 	return 0;
 }
 
-void printMainMenu(int number)
+void printMainMenu(int menuID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	char *menuText[] = { "1 - int","2 - char", "3 - float", "4 - double", "5 - long", "6 - change color", "7 - exit" };
+	char *menuText[] = { "1 - int","2 - char", "3 - float", "4 - double", "5 - long", "6 - change color", "7 - EXIT" };
 	system("cls");
 	printf("%s%s%s", "===============================\n",
 		":::::::::::::MENU::::::::::::::\n",
 		"===============================\n");
 	for (int i = 0; i < 7; i++)
 	{
-		if ((number - 1) == i) {
+		if ((menuID - 1) == i) {
 			printf("->");
 			SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
 		}
@@ -127,7 +121,7 @@ void printMainMenu(int number)
 	printf("%s", "===============================\n");
 }
 
-bool choiseInputType(int param)
+bool choiseInputType(int menuID)
 {
 	/*
 	1-int
@@ -143,42 +137,42 @@ bool choiseInputType(int param)
 	double d;
 	long e;
 	printMainMenu(mainMenuID);
-	switch (param)
+	switch (menuID)
 	{
 	case 1:
 		printf("int: ");
 		if (!scanf_s("%d", &a))
 			throw 1;
 		printf("readed: %d\n", a);
-		a = choiseBinMenu(a, param);
+		a = choiseBinMenu(a, menuID);
 		break;
 	case 2:
 		printf("char: ");
 		if (!scanf_s("%c", &b))
 			throw 1;
 		printf("readed: %c\n", b);
-		b = choiseBinMenu(b, param);
+		b = choiseBinMenu(b, menuID);
 		break;
 	case 3:
 		printf("float: ");
 		if (!scanf_s("%f", &c))
 			throw 1;
 		printf("readed: %f\n", c);
-		c = choiseBinMenu(c, param);
+		c = choiseBinMenu(c, menuID);
 		break;
 	case 4:
 		printf("double: ");
 		if (!scanf_s("%lf", &d))
 			throw 1;
 		printf("readed: %lf\n", d);
-		d = choiseBinMenu(d, param);
+		d = choiseBinMenu(d, menuID);
 		break;
 	case 5:
 		printf("long: ");
 		if (!scanf_s("%d", &e))
 			throw 1;
 		printf("readed: %d\n", e);
-		e = choiseBinMenu(e, param);
+		e = choiseBinMenu(e, menuID);
 		break;
 	case 6:
 		colorMenu();
@@ -405,19 +399,7 @@ void colorMenu()
 				colorMenuID = 1;
 			break;
 		case enter:
-			switch (subColorMenuID)
-			{
-			case 2:
-				tmp = colorMenuID + 10;
-				break;
-			case 3:
-				tmp = colorMenuID + 20;
-				break;
-			default:
-				tmp = colorMenuID;
-				break;
-			}
-			isExit = choiseColor(tmp);
+			isExit = choiseColor(subColorMenuID, colorMenuID);
 			break;
 		case escape:
 			isExit = 0;
@@ -429,7 +411,7 @@ void colorMenu()
 	}
 }
 
-void printColorMenu(int menuID, int subID)
+void printColorMenu(int colorMenuID, int subColorMenuID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	char *menuText[] = { "1 - green","2 - blue", "3 - red", "4 - yellow", "5 - white", "6 - MAIN MENU" };
@@ -438,11 +420,11 @@ void printColorMenu(int menuID, int subID)
 	printf("%s%s%s", "===============================\n",
 		"::::::::::COLOR MENU:::::::::::\n",
 		"===============================\n");
-	printSubColorMenu(subID);
+	printSubColorMenu(subColorMenuID);
 	printf("%s", "===============================\n");
 	for (int i = 0; i < 6; i++)
 	{
-		if ((menuID - 1) == i)
+		if ((colorMenuID - 1) == i)
 			printf("->");
 		else
 			printf("| ");
@@ -453,69 +435,22 @@ void printColorMenu(int menuID, int subID)
 	printf("%s", "===============================\n");
 }
 
-bool choiseColor(int param)
+bool choiseColor(int menuID, int colorID)
 {
-	/*
-	0X-sign
-	1X-order
-	2X-mantis
-	*/
-	switch (param)
+	int arrColor[] = { 10,11,12,14,15 };
+	if (colorID < 1 || colorID>5)
+		return false;
+	switch (menuID)
 	{
 	case 1:		
-		color.sign = 10;
+		color.sign = arrColor[colorID - 1];
 		break;
 	case 2:
-		color.sign = 11;
+		color.order = arrColor[colorID - 1];
 		break;
 	case 3:
-		color.sign = 12;
-		break;
-	case 4:
-		color.sign = 14;
-		break;
-	case 5:
-		color.sign = 15;
-		break;
-	case 6:
-		return false;
-		break;
-	case 11:
-		color.order = 10;
-		break;
-	case 12:
-		color.order = 11;
-		break;
-	case 13:
-		color.order = 12;
-		break;
-	case 14:
-		color.order = 14;
-		break;
-	case 15:
-		color.order = 15;
-		break;
-	case 16:
-		return false;
-		break;
-	case 21:
-		color.mantissa = 10;
-		break;
-	case 22:
-		color.mantissa = 11;
-		break;
-	case 23:
-		color.mantissa = 12;
-		break;
-	case 24:
-		color.mantissa = 14;
-		break;
-	case 25:
-		color.mantissa = 15;
-		break;
-	case 26:
-		return false;
-		break;
+		color.mantissa = arrColor[colorID - 1];
+		break;	
 	default:
 		color.mantissa = color.order=color.sign=15;
 		throw 3;
@@ -524,7 +459,7 @@ bool choiseColor(int param)
 	return true;
 }
 
-void printSubColorMenu(int param)
+void printSubColorMenu(int menuID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	char *menuText[] = { "sign","order", "mantissa" };
@@ -536,10 +471,10 @@ void printSubColorMenu(int param)
 	for (int i = 0; i < 3; i++)
 	{
 		SetConsoleTextAttribute(hConsole, (WORD)((arrColor[i] << 4) | 0));
-		if ((param - 1) == i)
+		if ((menuID - 1) == i)
 			printf("->");
 		printf("%s", menuText[i]);
-		if ((param - 1) == i)
+		if ((menuID - 1) == i)
 			printf("<-");
 	}
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
