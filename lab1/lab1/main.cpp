@@ -148,28 +148,28 @@ bool choiseInputType(int menuID)
 		break;
 	case 2:
 		printf("char: ");
-		if (!scanf_s("%c", &b))
+		if (scanf_s("%c", &b) == 0)
 			throw 1;
 		printf("readed: %c\n", b);
 		b = choiseBinMenu(b, menuID);
 		break;
 	case 3:
 		printf("float: ");
-		if (!scanf_s("%f", &c))
+		if (scanf_s("%f", &c) == 0)
 			throw 1;
 		printf("readed: %f\n", c);
 		c = choiseBinMenu(c, menuID);
 		break;
 	case 4:
 		printf("double: ");
-		if (!scanf_s("%lf", &d))
+		if (scanf_s("%lf", &d) == 0)
 			throw 1;
 		printf("readed: %lf\n", d);
 		d = choiseBinMenu(d, menuID);
 		break;
 	case 5:
 		printf("long: ");
-		if (!scanf_s("%d", &e))
+		if (scanf_s("%d", &e)==0)
 			throw 1;
 		printf("readed: %d\n", e);
 		e = choiseBinMenu(e, menuID);
@@ -210,7 +210,7 @@ T choiseBinMenu(T number, int param)
 		case right:
 			binMenuID--;
 			if (binMenuID < 0)
-				binMenuID = binSize - 1;;
+				binMenuID = binSize - 1;
 			break;
 		case enter:
 			isInverse = true;
@@ -235,13 +235,13 @@ T printBinNumber(const T number, int typeID, int startPos, bool isInverse)
 	3-float
 	4-double
 	5-long
-	*/	
+	*/
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	char *pointer = (char*)&number;	
+	char *pointer = (char*)&number;
 	printf("size: %d bytes \n", sizeof(T));
 	printLine(sizeof(T));
 	printBitNumbers(sizeof(T));
-	pointer += sizeof(T)-1;
+	pointer += sizeof(T) - 1;
 	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
 	{
 		for (int j = 7; j >= 0; j--, count--)
@@ -254,7 +254,6 @@ T printBinNumber(const T number, int typeID, int startPos, bool isInverse)
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		printf(" ");
 	}
-	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	printLine(sizeof(T));
 	std::cout << "current number: " << std::setprecision(18) << number << "\n";
 	return number;
@@ -265,7 +264,7 @@ void printBitNumbers(int typeSize)
 	for (int i = typeSize * 8 - 1, j = 7; i >= 0; i--, j--)
 	{
 		printf("%d", j % 10);
-		if (!j)
+		if (j == 0)
 		{
 			printf(" ");
 			j = 8;
@@ -277,14 +276,14 @@ void printBitNumbers(int typeSize)
 void printLine(int bytesCount)
 {
 	printf("\n");
-	for (int i = bytesCount * 8+bytesCount; i > 0; i--)
+	for (int i = bytesCount * 8 + bytesCount; i > 0; i--)
 		printf("%s", "-");
 	printf("\n");
 }
 
 void printErrorDescrption(int errCode)
 {
-	printf("ERROR CODE: %d [",errCode);
+	printf("ERROR CODE: %d [", errCode);
 	switch (errCode)
 	{
 	case 1:
@@ -297,13 +296,13 @@ void printErrorDescrption(int errCode)
 	case 3:
 		printf("%s", "color not found: setting default color");
 		break;
-	case 4:		
+	case 4:
 		printf("%s", "subColorMenu ID not found");
 		break;
 	case 5:
 		printf("%s", "mainMenu ID not found");
 		break;
-	case 6:		
+	case 6:
 		printf("%s", "colorMenu ID not found");
 		break;
 	default:
@@ -343,9 +342,9 @@ void setNumberColor(binNumber pos, int count)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
-	if (count==pos.sign)
+	if (count == pos.sign)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.sign << 4) | 0));
-	if (count<=pos.order && count >pos.mantissa)
+	if (count <= pos.order && count > pos.mantissa)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.order << 4) | 0));
 	if (count <= pos.mantissa && count >= 0)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
@@ -354,7 +353,7 @@ void setNumberColor(binNumber pos, int count)
 void setMenuColor(int pos, int typeID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (pos== binMenuID)
+	if (pos == binMenuID)
 		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
 	else
 		setColorForTypes(typeID, pos);
@@ -442,7 +441,7 @@ bool choiseColor(int menuID, int colorID)
 		return false;
 	switch (menuID)
 	{
-	case 1:		
+	case 1:
 		color.sign = arrColor[colorID - 1];
 		break;
 	case 2:
@@ -450,9 +449,9 @@ bool choiseColor(int menuID, int colorID)
 		break;
 	case 3:
 		color.mantissa = arrColor[colorID - 1];
-		break;	
+		break;
 	default:
-		color.mantissa = color.order=color.sign=15;
+		color.mantissa = color.order = color.sign = 15;
 		throw 3;
 		break;
 	}
