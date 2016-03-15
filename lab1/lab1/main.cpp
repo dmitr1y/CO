@@ -62,7 +62,7 @@ int main() {
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
 	printMainMenu(1);//init menu
 	printf("%s", "Press F1 for open help\n");
-	char keyCode;
+	int keyCode;
 	while (isExit != 0)
 	{
 		keyCode = _getch();
@@ -204,8 +204,9 @@ T choiseBinMenu(T number, int param)
 	binSize = sizeof(number) * 8;
 	binMenuID = binSize - 1;
 	printBinNumber(number, param, binSize - 1, false);
-	while ((isExit != 0) && ((keyCode = _getch()) != 0))
+	while (isExit != 0)
 	{
+		keyCode = _getch();
 		isInverse = false;
 		system("cls");
 		switch (keyCode) {
@@ -374,8 +375,9 @@ void colorMenu()
 	int tmp;
 	int keyCode;
 	printColorMenu(1, 1);
-	while ((isExit != 0) && ((keyCode = _getch()) != 0))
+	while (isExit != 0)
 	{
+		keyCode = _getch();
 		system("cls");
 		switch (keyCode) {
 		case left:
