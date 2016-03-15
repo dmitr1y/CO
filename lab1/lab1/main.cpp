@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 #include <Windows.h>
 #include <iomanip>
@@ -19,7 +19,8 @@ enum keybordKeys
 	up=72,
 	down=80,
 	home=71,
-	end=79
+	end=79,
+	F1_key=59
 };
 
 void printMainMenu(int);
@@ -38,6 +39,7 @@ void printColorMenu(int, int);
 bool choiseColor(int, int);
 void printSubColorMenu(int);
 void setMenuColor(int, int);
+void printHelp();
 
 binNumber posInt, posFloat, posDouble, posLong;//position sign,order & mantissa for different types
 int mainMenuID = 1; //initial 1 point of Main menu
@@ -59,11 +61,13 @@ int main() {
 	system("color F0");
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
 	printMainMenu(1);//init menu
-	char readedChar;
-	while ((isExit != 0) && ((readedChar = _getch()) != 0))
+	printf("%s", "Press F1 for open help\n");
+	char keyCode;
+	while (isExit != 0)
 	{
+		keyCode = _getch();
 		try {
-			switch (readedChar) {
+			switch (keyCode) {
 			case home:
 				mainMenuID = 1;
 				break;
@@ -85,6 +89,9 @@ int main() {
 				break;
 			case escape:
 				isExit = 0;
+				break;
+			case F1_key:
+				printHelp();
 				break;
 			default:
 				break;
@@ -191,17 +198,17 @@ template<typename T>
 T choiseBinMenu(T number, int param)
 {
 	int isExit = 1;
-	char readedChar;
+	int keyCode;
 	bool isInverse = false;
 	int binSize;
 	binSize = sizeof(number) * 8;
 	binMenuID = binSize - 1;
 	printBinNumber(number, param, binSize - 1, false);
-	while ((isExit != 0) && ((readedChar = _getch()) != 0))
+	while ((isExit != 0) && ((keyCode = _getch()) != 0))
 	{
 		isInverse = false;
 		system("cls");
-		switch (readedChar) {
+		switch (keyCode) {
 		case left:
 			binMenuID++;
 			if (binMenuID > (binSize - 1))
@@ -365,12 +372,12 @@ void colorMenu()
 	int isExit = 1;
 	int subColorMenuID = 1;
 	int tmp;
-	char readedChar;
+	int keyCode;
 	printColorMenu(1, 1);
-	while ((isExit != 0) && ((readedChar = _getch()) != 0))
+	while ((isExit != 0) && ((keyCode = _getch()) != 0))
 	{
 		system("cls");
-		switch (readedChar) {
+		switch (keyCode) {
 		case left:
 			subColorMenuID--;
 			if (subColorMenuID < 1)
@@ -478,4 +485,25 @@ void printSubColorMenu(int menuID)
 	}
 	SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 	printf("%s", ":::\n");
+}
+
+void printHelp()
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	system("cls");
+	char *arrKeys[] = { "F1", "up, down, left, right","home","end", "Enter", "Esc" };
+	char *arrDescriptions[] = { "help", "use to select","go to the first menu item","go to the last menu item", "confirm the selection (or invert selected bit)", "exit the current menu" };
+	printf("%s%s%s", "===============================\n",
+		":::::::::::::HELP::::::::::::::\n",
+		"===============================\n");
+	for (int i = 0; i < 6; i++)
+	{
+		printf("| ");
+		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
+		printf("%s", arrKeys[i]);
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		printf(" - %s\n", arrDescriptions[i]);
+	}
+	printf("%s", "===============================\n");
+	system("pause");
 }
