@@ -32,7 +32,7 @@ void printLine(int);
 void printBitNumbers(int);
 bool choiseInputType(int);
 void printErrorDescrption(int);
-int setColorForTypes(int, int);
+void setColorForTypes(int, int);
 void colorMenu();
 void setNumberColor(binNumber, int);
 void printColorMenu(int, int);
@@ -65,6 +65,7 @@ int main() {
 	int keyCode;
 	while (isExit != 0)
 	{
+	//	_getch();
 		keyCode = _getch();
 		try {
 			switch (keyCode) {
@@ -96,7 +97,6 @@ int main() {
 			default:
 				break;
 			}
-			system("cls");
 			printMainMenu(mainMenuID);
 		}
 		catch (int errID) {
@@ -195,7 +195,7 @@ bool choiseInputType(int menuID)
 }
 
 template<typename T>
-T choiseBinMenu(T number, int param)
+T choiseBinMenu(T number, int typeID)
 {
 	int isExit = 1;
 	int keyCode;
@@ -203,7 +203,7 @@ T choiseBinMenu(T number, int param)
 	int binSize;
 	binSize = sizeof(number) * 8;
 	binMenuID = binSize - 1;
-	printBinNumber(number, param, binSize - 1, false);
+	printBinNumber(number, typeID, binSize - 1, false);
 	while (isExit != 0)
 	{
 		keyCode = _getch();
@@ -229,13 +229,13 @@ T choiseBinMenu(T number, int param)
 		default:
 			break;
 		}
-		number = printBinNumber(number, param, binMenuID, isInverse);
+		number = printBinNumber(number, typeID, binMenuID, isInverse);
 	}
 	return number;
 };
 
 template<typename T>
-T printBinNumber(const T number, int typeID, int startPos, bool isInverse)
+T printBinNumber(const T number, int typeID, int binMenuID, bool isInverse)
 {
 	/* TypeID:
 	1-int
@@ -321,29 +321,28 @@ void printErrorDescrption(int errCode)
 	system("pause");
 }
 
-int setColorForTypes(int typeID, int count)
+void setColorForTypes(int typeID, int pos)
 {
 	switch (typeID)
 	{
 	case 1:
-		setNumberColor(posInt, count);
+		setNumberColor(posInt, pos);
 		break;
 	case 2:
-		setNumberColor(posInt, count);
+		setNumberColor(posInt, pos);
 		break;
 	case 3:
-		setNumberColor(posFloat, count);
+		setNumberColor(posFloat, pos);
 		break;
 	case 4:
-		setNumberColor(posDouble, count);
+		setNumberColor(posDouble, pos);
 		break;
 	case 5:
-		setNumberColor(posLong, count);
+		setNumberColor(posLong, pos);
 		break;
 	default:
 		break;
 	}
-	return 0;
 }
 
 void setNumberColor(binNumber pos, int count)
@@ -377,7 +376,6 @@ void colorMenu()
 	while (isExit != 0)
 	{
 		keyCode = _getch();
-		system("cls");
 		switch (keyCode) {
 		case left:
 			subColorMenuID--;
