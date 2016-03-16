@@ -372,7 +372,6 @@ void colorMenu()
 	int colorMenuID = 1;
 	int isExit = 1;
 	int subColorMenuID = 1;
-	int tmp;
 	int keyCode;
 	printColorMenu(1, 1);
 	while (isExit != 0)
