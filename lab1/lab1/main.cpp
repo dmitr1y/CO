@@ -2,6 +2,8 @@
 #include <conio.h>
 #include <Windows.h>
 #include <iomanip>
+#include <intrin.h>
+#include <stdio.h>
 
 struct binNumber
 {
@@ -25,9 +27,17 @@ enum keybordKeys
 
 void printMainMenu(int);
 template <typename T>
-T printBinNumber(T, int, int, bool);
+T setBitState(T, int, int, bool);
 template <typename T>
 T choiseBinMenu(T, int);
+template<typename T>
+T setRangeBitState(const T, int, int, bool, int);
+template<typename T>
+T editMenu(const T,int);
+template<typename T>
+void printBinNumber(const T, int);
+template<typename T>
+T choiseEditMenu(int, T, int);
 void printLine(int);
 void printBitNumbers(int);
 bool choiseInputType(int);
@@ -38,8 +48,12 @@ void setNumberColor(binNumber, int);
 void printColorMenu(int, int);
 bool choiseColor(int, int);
 void printSubColorMenu(int);
-void setMenuColor(int, int);
+void setMenuColor(int, int, int);
 void printHelp();
+void printEditMenu(int);
+
+template<typename T>
+void printBinNumberWithMask(const T,int,int);
 
 binNumber posInt, posFloat, posDouble, posLong;//position sign,order & mantissa for different types
 int mainMenuID = 1; //initial 1 point of Main menu
@@ -60,6 +74,14 @@ int main() {
 	color.mantissa = color.order = color.sign = 15;//default color: black
 	system("color F0");
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
+	//editMenu(124124, 1);
+	//while (1)
+	//{
+	//	system("cls");
+	//	srand(__rdtsc());
+	//	setRangeBitState(rand() % 646561651, rand() % 32, rand() % 32, rand() % 2,1);
+	//	_getch();
+	//}
 	printMainMenu(1);//init menu
 	printf("%s", "Press F1 for open help\n");
 	int keyCode;
@@ -151,35 +173,35 @@ bool choiseInputType(int menuID)
 		if (!scanf_s("%d", &a))
 			throw 1;
 		printf("readed: %d\n", a);
-		a = choiseBinMenu(a, menuID);
+		a = editMenu(a, menuID);
 		break;
 	case 2:
 		printf("char: ");
 		if (scanf_s("%c", &b) == 0)
 			throw 1;
 		printf("readed: %c\n", b);
-		b = choiseBinMenu(b, menuID);
+		b = editMenu(b, menuID);
 		break;
 	case 3:
 		printf("float: ");
 		if (scanf_s("%f", &c) == 0)
 			throw 1;
 		printf("readed: %f\n", c);
-		c = choiseBinMenu(c, menuID);
+		//c = editMenu(c, menuID);
 		break;
 	case 4:
 		printf("double: ");
 		if (scanf_s("%lf", &d) == 0)
 			throw 1;
 		printf("readed: %lf\n", d);
-		d = choiseBinMenu(d, menuID);
+	//	d = editMenu(d, menuID);
 		break;
 	case 5:
 		printf("long: ");
 		if (scanf_s("%d", &e)==0)
 			throw 1;
 		printf("readed: %d\n", e);
-		e = choiseBinMenu(e, menuID);
+		e = editMenu(e, menuID);
 		break;
 	case 6:
 		colorMenu();
@@ -203,7 +225,7 @@ T choiseBinMenu(T number, int typeID)
 	int binSize;
 	binSize = sizeof(number) * 8;
 	binMenuID = binSize - 1;
-	printBinNumber(number, typeID, binSize - 1, false);
+	setBitState(number, typeID, binSize - 1, false);
 	while (isExit != 0)
 	{
 		keyCode = _getch();
@@ -229,13 +251,13 @@ T choiseBinMenu(T number, int typeID)
 		default:
 			break;
 		}
-		number = printBinNumber(number, typeID, binMenuID, isInverse);
+		number = setBitState(number, typeID, binMenuID, isInverse);
 	}
 	return number;
 };
 
 template<typename T>
-T printBinNumber(const T number, int typeID, int binMenuID, bool isInverse)
+T setBitState(const T number, int typeID, int binMenuID, bool isInverse)
 {
 	/* TypeID:
 	1-int
@@ -254,7 +276,7 @@ T printBinNumber(const T number, int typeID, int binMenuID, bool isInverse)
 	{
 		for (int j = 7; j >= 0; j--, count--)
 		{
-			setMenuColor(count, typeID);
+			setMenuColor(count, typeID, binMenuID);
 			if (isInverse == true && binMenuID == count)
 				(*pointer) ^= 0x01 << j;
 			printf("%d", (((*pointer) >> j) & 0x01));
@@ -265,6 +287,170 @@ T printBinNumber(const T number, int typeID, int binMenuID, bool isInverse)
 	printLine(sizeof(T));
 	std::cout << "current number: " << std::setprecision(18) << number << "\n";
 	return number;
+}
+
+template<typename T>
+void printBinNumberWithMask(const T number, int startBit, int endBit)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	char *pointer = (char*)&number;
+	printLine(sizeof(T));
+	printBitNumbers(sizeof(T));
+	pointer += sizeof(T) - 1;
+	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
+	{
+		for (int j = 7; j >= 0; j--, count--)
+		{
+			if (endBit >= count && startBit <= count)
+				SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
+			else
+				SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+			printf("%d", (((*pointer) >> j) & 0x01));
+		}
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		printf(" ");
+	}
+	printLine(sizeof(T));
+}
+
+template<typename T>
+void printBinNumber(const T number, int typeID)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	char *pointer = (char*)&number;
+	printLine(sizeof(T));
+	printBitNumbers(sizeof(T));
+	pointer += sizeof(T) - 1;
+	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
+	{
+		for (int j = 7; j >= 0; j--, count--)
+		{		
+			setColorForTypes(count, typeID);
+			printf("%d", (((*pointer) >> j) & 0x01));
+		}	
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+		printf(" ");
+	}
+	printLine(sizeof(T));
+	_getch();
+}
+
+template<typename T>
+T setRangeBitState(const T number, int startBit, int endBit, bool state, int typeID)
+{
+	long long tmp = NULL;
+	system("cls");
+	char *pointer = (char*)&tmp + sizeof(T) - 1;
+	if (startBit < 0 || startBit >= (8 * sizeof(T)) || endBit < 0 || endBit >= (8 * sizeof(T)))
+		throw 7;
+	std::cout << "source NUMBER: " << number << "\n";
+	printf("start bit: %d\nend bit: %d\nstate: %d\n\n", startBit, endBit, state);
+	for (int count = 8 * sizeof(T) - 1, i = sizeof(T) - 1; i >= 0; i--, pointer--)
+		//generate mask
+		for (int j = 7; j >= 0; j--, count--)
+			if (endBit >= count && startBit <= count)
+				(*pointer) |= 1 << j;
+	if (state == 0)
+		tmp = ~tmp;
+	printf("%s", "source NUMBER:");
+	printBinNumberWithMask(number, startBit, endBit);
+	printf("\n%s", "MASK:");
+	printBinNumberWithMask(tmp, startBit, endBit);
+	printf("\n%s", "result NUMBER:");
+	tmp = number& tmp;
+	printBinNumberWithMask(tmp, startBit, endBit);	
+	std::cout << "\nresult NUMBER: " << tmp << "\n";
+	_getch();
+	return tmp;
+}
+
+template<typename T>
+T editMenu(const T number, int typeID)
+{
+	T tmp=number;
+	int editMenuID = 1;
+	int isExit = 1;
+	int keyCode;
+	printEditMenu(editMenuID);
+	while (isExit != 0)
+	{
+		keyCode = _getch();
+		switch (keyCode) {
+		case up:
+			editMenuID--;
+			if (editMenuID < 1)
+				editMenuID = 3;
+			break;
+		case down:
+			editMenuID++;
+			if (editMenuID > 32)
+				editMenuID = 1;
+			break;
+		case enter:
+			tmp = choiseEditMenu(editMenuID,number,typeID);
+			break;
+		case escape:
+			isExit = 0;
+			break;
+		default:
+			break;
+		}
+		printEditMenu(editMenuID);
+	}
+	return tmp;
+}
+
+template<typename T>
+T choiseEditMenu(int menuID, T number,int typeID)
+{
+	int startBit;
+	int endBit;
+	int state;
+	switch (menuID)
+	{
+	case 1:
+		number=choiseBinMenu(number, typeID);
+		break;
+	case 2:
+		printf("%s", "input:\nstart bit: ");
+		scanf("%d", &startBit);
+		printf("%s", "end bit: ");
+		scanf("%d", &endBit);
+		printf("%s", "state: ");
+		scanf("%d", &state);
+		if (state!=0 && state!=1)		
+			return number;		
+		number = setRangeBitState(number, startBit, endBit, state, typeID);
+		break;
+	case 3:
+		printBinNumber(number, typeID);
+		break;
+	default:
+		return false;
+	}
+	return number;
+}
+
+void printEditMenu(int menuID)
+{
+	system("cls");
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	char *menuTXT[] = { "1 - bitmap editing", "2 - edit bit range","3 - just output bitmap" };
+		printf("%s%s%s", "===============================\n",
+			":::::::BITMAP EDIT MENU::::::::\n",
+			"===============================\n");
+	for (int i = 0; i < 3; i++)
+	{
+		if ((menuID - 1) == i) {
+			printf("->");
+			SetConsoleTextAttribute(hConsole, (WORD)((8 << 4) | 15));
+		}
+		else
+			printf("| ");
+		printf("%s\n", menuTXT[i]);
+		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
+	}
+	printf("%s", "===============================\n");
 }
 
 void printBitNumbers(int typeSize)
@@ -313,6 +499,9 @@ void printErrorDescrption(int errCode)
 	case 6:
 		printf("%s", "colorMenu ID not found");
 		break;
+	case 7:
+		printf("%s", "wrong range");
+		break;
 	default:
 		printf("%s", "unknown");
 		break;
@@ -357,10 +546,10 @@ void setNumberColor(binNumber pos, int count)
 		SetConsoleTextAttribute(hConsole, (WORD)((color.mantissa << 4) | 0));
 }
 
-void setMenuColor(int pos, int typeID)
+void setMenuColor(int pos, int typeID, int menuID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (pos == binMenuID)
+	if (pos == menuID)
 		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
 	else
 		setColorForTypes(typeID, pos);
