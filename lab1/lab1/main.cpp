@@ -51,6 +51,7 @@ void printSubColorMenu(int);
 void setMenuColor(int, int, int);
 void printHelp();
 void printEditMenu(int);
+void printBinNumberRecurs(char *, int);
 
 template<typename T>
 void printBinNumberWithMask(const T,int,int);
@@ -74,20 +75,11 @@ int main() {
 	color.mantissa = color.order = color.sign = 15;//default color: black
 	system("color F0");
 	int isExit = 1;//flag to exit: 1->continue, 0->exit	
-	//editMenu(124124, 1);
-	//while (1)
-	//{
-	//	system("cls");
-	//	srand(__rdtsc());
-	//	setRangeBitState(rand() % 646561651, rand() % 32, rand() % 32, rand() % 2,1);
-	//	_getch();
-	//}
 	printMainMenu(1);//init menu
 	printf("%s", "Press F1 for open help\n");
 	int keyCode;
 	while (isExit != 0)
 	{
-	//	_getch();
 		keyCode = _getch();
 		try {
 			switch (keyCode) {
@@ -297,7 +289,8 @@ void printBinNumberWithMask(const T number, int startBit, int endBit)
 	printLine(sizeof(T));
 	printBitNumbers(sizeof(T));
 	pointer += sizeof(T) - 1;
-	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
+	printBinNumberRecurs(pointer, sizeof(T));
+	/*for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
 	{
 		for (int j = 7; j >= 0; j--, count--)
 		{
@@ -309,7 +302,7 @@ void printBinNumberWithMask(const T number, int startBit, int endBit)
 		}
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		printf(" ");
-	}
+	}*/
 	printLine(sizeof(T));
 }
 
@@ -335,10 +328,29 @@ void printBinNumber(const T number, int typeID)
 	_getch();
 }
 
+void printBinNumberRecurs(char *pointer, int size)
+{
+	 int j = 7;
+	if (size>0)
+	{
+		if (j >= 0) {
+			std::cout << (((*pointer) >> j) & 1);
+			j--;
+		}
+		else {
+			printf(" ");
+			j = 7;
+			size--;
+			pointer--;
+		}
+		printBinNumberRecurs(pointer, size);
+	}
+}
+
 template<typename T>
 T setRangeBitState(const T number, int startBit, int endBit, bool state, int typeID)
 {
-	long long tmp = NULL;
+	T tmp = NULL;
 	system("cls");
 	char *pointer = (char*)&tmp + sizeof(T) - 1;
 	if (startBit < 0 || startBit >= (8 * sizeof(T)) || endBit < 0 || endBit >= (8 * sizeof(T)))
@@ -357,7 +369,10 @@ T setRangeBitState(const T number, int startBit, int endBit, bool state, int typ
 	printf("\n%s", "MASK:");
 	printBinNumberWithMask(tmp, startBit, endBit);
 	printf("\n%s", "result NUMBER:");
-	tmp = number& tmp;
+	if (state == 1)
+		tmp |= number;
+	else
+		tmp = number& tmp;
 	printBinNumberWithMask(tmp, startBit, endBit);	
 	std::cout << "\nresult NUMBER: " << tmp << "\n";
 	_getch();
@@ -387,7 +402,7 @@ T editMenu(const T number, int typeID)
 				editMenuID = 1;
 			break;
 		case enter:
-			tmp = choiseEditMenu(editMenuID,number,typeID);
+			tmp = choiseEditMenu(editMenuID,tmp,typeID);
 			break;
 		case escape:
 			isExit = 0;
@@ -413,11 +428,11 @@ T choiseEditMenu(int menuID, T number,int typeID)
 		break;
 	case 2:
 		printf("%s", "input:\nstart bit: ");
-		scanf("%d", &startBit);
+		scanf_s("%d", &startBit);
 		printf("%s", "end bit: ");
-		scanf("%d", &endBit);
+		scanf_s("%d", &endBit);
 		printf("%s", "state: ");
-		scanf("%d", &state);
+		scanf_s("%d", &state);
 		if (state!=0 && state!=1)		
 			return number;		
 		number = setRangeBitState(number, startBit, endBit, state, typeID);
