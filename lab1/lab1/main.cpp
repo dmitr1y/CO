@@ -289,8 +289,8 @@ void printBinNumberWithMask(const T number, int startBit, int endBit)
 	printLine(sizeof(T));
 	printBitNumbers(sizeof(T));
 	pointer += sizeof(T) - 1;
-	printBinNumberRecurs(pointer, sizeof(T));
-	/*for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
+	//printBinNumberRecurs(pointer, sizeof(T));
+	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
 	{
 		for (int j = 7; j >= 0; j--, count--)
 		{
@@ -302,7 +302,7 @@ void printBinNumberWithMask(const T number, int startBit, int endBit)
 		}
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
 		printf(" ");
-	}*/
+	}
 	printLine(sizeof(T));
 }
 
@@ -318,7 +318,7 @@ void printBinNumber(const T number, int typeID)
 	{
 		for (int j = 7; j >= 0; j--, count--)
 		{		
-			setColorForTypes(count, typeID);
+			setColorForTypes(typeID,count);
 			printf("%d", (((*pointer) >> j) & 0x01));
 		}	
 		SetConsoleTextAttribute(hConsole, (WORD)((15 << 4) | 0));
@@ -330,7 +330,7 @@ void printBinNumber(const T number, int typeID)
 
 void printBinNumberRecurs(char *pointer, int size)
 {
-	 int j = 7;
+	static int j = 7;
 	if (size>0)
 	{
 		if (j >= 0) {
