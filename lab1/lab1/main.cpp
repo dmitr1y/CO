@@ -38,6 +38,8 @@ template<typename T>
 void printBinNumber(const T, int);
 template<typename T>
 T choiseEditMenu(int, T, int);
+template<typename T>
+void printBinNumberWithMask(const T, int, int);
 void printLine(int);
 void printBitNumbers(int);
 bool choiseInputType(int);
@@ -52,9 +54,6 @@ void setMenuColor(int, int, int);
 void printHelp();
 void printEditMenu(int);
 void printBinNumberRecurs(char *, int);
-
-template<typename T>
-void printBinNumberWithMask(const T,int,int);
 
 binNumber posInt, posFloat, posDouble, posLong;//position sign,order & mantissa for different types
 int mainMenuID = 1; //initial 1 point of Main menu
@@ -289,7 +288,6 @@ void printBinNumberWithMask(const T number, int startBit, int endBit)
 	printLine(sizeof(T));
 	printBitNumbers(sizeof(T));
 	pointer += sizeof(T) - 1;
-	//printBinNumberRecurs(pointer, sizeof(T));
 	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--)
 	{
 		for (int j = 7; j >= 0; j--, count--)
