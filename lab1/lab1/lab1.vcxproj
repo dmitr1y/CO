@@ -110,7 +110,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="binNumber.cpp" />
+    <ClCompile Include="global_data.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu_functions.cpp" />
+    <ClCompile Include="output_funtions.cpp" />
+    <ClCompile Include="templates.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="binNumber.h" />
+    <ClInclude Include="global_data.h" />
+    <ClInclude Include="keybord_keys.h" />
+    <ClInclude Include="menu_functions.h" />
+    <ClInclude Include="output_funtions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
