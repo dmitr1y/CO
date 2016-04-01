@@ -3,6 +3,6 @@
 int main() {
 	system("color F0");
 	mainMenu();
-	system("pause>>void");
+//	system("pause>>void");
 	return 0;
 }

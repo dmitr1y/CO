@@ -1,5 +1,5 @@
 #include "menu_functions.h"
-#include "templates.h"
+#include "templates.cpp"
 
 void mainMenu()
 {
@@ -72,35 +72,35 @@ bool choiseInputType(int menuID)
 	{
 	case 1:
 		printf("int: ");
-		if (!scanf_s("%d", &a))
+		if (!scanf("%d", &a))
 			throw 1;
 		//printf("readed: %d\n", a);
 		a = editMenu(a, menuID);
 		break;
 	case 2:
 		printf("char: ");
-		if (scanf_s("%c", &b) == 0)
+		if (scanf("%c", &b) == 0)
 			throw 1;
 		//printf("readed: %c\n", b);
 		b = editMenu(b, menuID);
 		break;
 	case 3:
 		printf("float: ");
-		if (scanf_s("%f", &c) == 0)
+		if (scanf("%f", &c) == 0)
 			throw 1;
 		printf("readed: %f\n", c);
 		c = editMenu(c, menuID);
 		break;
 	case 4:
 		printf("double: ");
-		if (scanf_s("%lf", &d) == 0)
+		if (scanf("%lf", &d) == 0)
 			throw 1;
 		//printf("readed: %lf\n", d);
 		d = editMenu(d, menuID);
 		break;
 	case 5:
 		printf("long: ");
-		if (scanf_s("%d", &e) == 0)
+		if (scanf("%d", &e) == 0)
 			throw 1;
 		//printf("readed: %d\n", e);
 		e = editMenu(e, menuID);

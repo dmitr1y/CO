@@ -80,7 +80,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -114,15 +114,15 @@
     <ClCompile Include="global_data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_functions.cpp" />
-    <ClCompile Include="output_funtions.cpp" />
-    <ClCompile Include="templates.h" />
+    <ClCompile Include="output_functions.cpp" />
+    <ClCompile Include="templates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="binNumber.h" />
     <ClInclude Include="global_data.h" />
     <ClInclude Include="keybord_keys.h" />
     <ClInclude Include="menu_functions.h" />
-    <ClInclude Include="output_funtions.h" />
+    <ClInclude Include="output_functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

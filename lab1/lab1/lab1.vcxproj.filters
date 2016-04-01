@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="output_funtions.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="menu_functions.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -30,7 +27,10 @@
     <ClCompile Include="global_data.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="templates.h">
+    <ClCompile Include="output_functions.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="templates.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="menu_functions.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="output_funtions.h">
+    <ClInclude Include="output_functions.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

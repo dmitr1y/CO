@@ -1,7 +1,7 @@
 #pragma once
 #include "binNumber.h"
 #include "global_data.h"
-#include "output_funtions.h"
+#include "output_functions.h"
 #include "keybord_keys.h"
 
 #include <iostream>

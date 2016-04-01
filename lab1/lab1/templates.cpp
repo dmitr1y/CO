@@ -13,7 +13,7 @@ T setBitState(const T number, int typeID, int binMenuID, bool isInverse)
 	*/
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	char *pointer = (char*)&number;
-	printf("size: %d bytes \n", sizeof(T));
+	printf("size: %zd bytes \n", sizeof(T));
 	printLine(sizeof(T));
 	printBitNumbers(sizeof(T));
 	pointer += sizeof(T) - 1;
@@ -37,33 +37,33 @@ T setBitState(const T number, int typeID, int binMenuID, bool isInverse)
 template<typename T>
 T setRangeBitState(const T number, int startBit, int endBit, bool state, int typeID)
 {
-	long long tmp = NULL;
+	long long mask = 0;
 	system("cls");
-	char *pointer = (char*)&tmp + sizeof(T) - 1;
+	char *pointer = (char*)&mask + sizeof(mask) - 1;
 	if (startBit < 0 || startBit >= (8 * sizeof(T)) || endBit < 0 || endBit >= (8 * sizeof(T)))
 		throw 7;
 	std::cout << "source NUMBER: " << number << "\n";
 	printf("start bit: %d\nend bit: %d\nstate: %d\n\n", startBit, endBit, state);
-	for (int count = 8 * sizeof(T) - 1, i = sizeof(T) - 1; i >= 0; i--, pointer--)
+	for (int count = 8 * sizeof(mask) - 1, i = sizeof(mask) - 1; i >= 0; i--, pointer--)
 		//generate mask
 		for (int j = 7; j >= 0; j--, count--)
 			if (endBit >= count && startBit <= count)
 				(*pointer) |= 1 << j;
 	if (state == 0)
-		tmp = ~tmp;
+		mask = ~mask;
 	printf("%s", "source NUMBER:");
 	printBinNumberWithMask(number, startBit, endBit);
 	printf("\n%s", "MASK:");
-	printBinNumberWithMask(static_cast<T>(tmp), startBit, endBit);
+	printBinNumberWithMask(mask, startBit, endBit);
 	printf("\n%s", "result NUMBER:");
 	if (state == 1)
-		tmp |= static_cast<long long>(number);
+		mask |= static_cast<long long>(number);
 	else
-		tmp = static_cast<long long>(number)& tmp;
-	printBinNumberWithMask(static_cast<T>(tmp), startBit, endBit);
-	std::cout << "\nresult NUMBER: " << tmp << "\nsize: " << sizeof(tmp);
+		mask = static_cast<long long>(number)& mask;
+	printBinNumberWithMask(mask, startBit, endBit);
+	std::cout << "\nresult NUMBER: " << static_cast<T>(mask) << "\nsize: " << sizeof(mask);
 	_getch();
-	return static_cast<T>(tmp);
+	return static_cast<T>(mask);
 }
 
 template<typename T>
@@ -105,7 +105,6 @@ T choiseBinMenu(T number, int typeID)
 	}
 	return number;
 };
-
 
 template<typename T>
 T editMenu(const T number, int typeID)
@@ -158,11 +157,11 @@ T choiseEditMenu(int menuID, T number, int typeID)
 		break;
 	case 2:
 		printf("%s", "input:\nstart bit: ");
-		scanf_s("%d", &startBit);
+		scanf("%d", &startBit);
 		printf("%s", "end bit: ");
-		scanf_s("%d", &endBit);
+		scanf("%d", &endBit);
 		printf("%s", "state: ");
-		scanf_s("%d", &state);
+		scanf("%d", &state);
 		if (state != 0 && state != 1)
 			return number;
 		number = setRangeBitState(number, startBit, endBit, state, typeID);

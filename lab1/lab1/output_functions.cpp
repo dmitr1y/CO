@@ -1,5 +1,5 @@
-#include "output_funtions.h"
-#include "templates.h"
+#include "output_functions.h"
+#include "templates.cpp"
 
 void clearStr(COORD pos)
 {
