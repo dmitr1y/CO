@@ -1,11 +1,6 @@
 #include "binNumber.h"
 #include "global_data.h"
 
-union largeNumber
-{
-	long long number;
-	long ptr[2];
-};
 template<typename T>
 T setBitState(const T number, int typeID, int binMenuID, bool isInverse)
 {
@@ -18,7 +13,7 @@ T setBitState(const T number, int typeID, int binMenuID, bool isInverse)
 	*/
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	char *pointer = (char*)&number;
-	printf("size: %d bytes \n", sizeof(T));
+	printf("size: %zd bytes \n", sizeof(T));
 	printLine(sizeof(T));
 	printBitNumbers(sizeof(T));
 	pointer += sizeof(T) - 1;
@@ -43,21 +38,12 @@ template<typename T>
 T setRangeBitState(const T number, int startBit, int endBit, bool state, int typeID)
 {
 	long long mask = 0;
-
 	system("cls");
-	largeNumber tmp;
-	tmp.number = number;
-	std::cout << tmp << " " << tmp.ptr[0] << " " << tmp.ptr[1];
-	system("pause<<void");
-
-
-
-	char *pointer = (char*)&mask + sizeof(T) - 1;
+	char *pointer = (char*)&mask + sizeof(mask) - 1;
 	if (startBit < 0 || startBit >= (8 * sizeof(T)) || endBit < 0 || endBit >= (8 * sizeof(T)))
 		throw 7;
 	std::cout << "source NUMBER: " << number << "\n";
 	printf("start bit: %d\nend bit: %d\nstate: %d\n\n", startBit, endBit, state);
-	//std::cout << 8 * sizeof(mask) - 1<<"\n";
 	for (int count = 8 * sizeof(mask) - 1, i = sizeof(mask) - 1; i >= 0; i--, pointer--)
 		//generate mask
 		for (int j = 7; j >= 0; j--, count--)
@@ -120,7 +106,6 @@ T choiseBinMenu(T number, int typeID)
 	return number;
 };
 
-
 template<typename T>
 T editMenu(const T number, int typeID)
 {
@@ -172,11 +157,11 @@ T choiseEditMenu(int menuID, T number, int typeID)
 		break;
 	case 2:
 		printf("%s", "input:\nstart bit: ");
-		scanf_s("%d", &startBit);
+		scanf("%d", &startBit);
 		printf("%s", "end bit: ");
-		scanf_s("%d", &endBit);
+		scanf("%d", &endBit);
 		printf("%s", "state: ");
-		scanf_s("%d", &state);
+		scanf("%d", &state);
 		if (state != 0 && state != 1)
 			return number;
 		number = setRangeBitState(number, startBit, endBit, state, typeID);
