@@ -1,6 +1,12 @@
 #include "binNumber.h"
 #include "global_data.h"
 
+union Number64bit
+{
+	long long number;
+	long ptr[2];
+};
+
 template<typename T>
 T setBitState(const T number, int typeID, int binMenuID, bool isInverse)
 {
@@ -38,8 +44,30 @@ template<typename T>
 T setRangeBitState(const T number, int startBit, int endBit, bool state, int typeID)
 {
 	long long mask = 0;
+	Number64bit numberLL;
+	numberLL.number = 0;
 	system("cls");
-	char *pointer = (char*)&mask + sizeof(mask) - 1;
+	numberLL.number=TypeToLongLong(number);
+	std::cout << "getted copy:\n";
+	std::cout << numberLL.number <<"\n";
+	long a = *&(numberLL.ptr[0]),b= *&(numberLL.ptr[1]);
+	long tmp;
+	std::cout << "size: " << sizeof(a) << "\n";
+	std::cout << "part of long long:" << a << "\n";
+	_asm {
+		mov eax, a;
+		//or eax, 8;
+		mov a, eax;
+		mov eax,b
+	}
+	std::cout <<"size: "<< sizeof(a) << "\n";
+	std::cout << "part of long long:" << a << "\n";
+	numberLL.ptr[0] = a;
+	std::cout << "result:" << numberLL.number << "\n";
+	printBinNumber(numberLL.number, 3);
+//	numberLL.ptr[0] = a;
+	//std::cout << numberLL.number << "\n";
+	/*char *pointer = (char*)&mask + sizeof(mask) - 1;
 	if (startBit < 0 || startBit >= (8 * sizeof(T)) || endBit < 0 || endBit >= (8 * sizeof(T)))
 		throw 7;
 	std::cout << "source NUMBER: " << number << "\n";
@@ -62,8 +90,9 @@ T setRangeBitState(const T number, int startBit, int endBit, bool state, int typ
 		mask = static_cast<long long>(number)& mask;
 	printBinNumberWithMask(mask, startBit, endBit);
 	std::cout << "\nresult NUMBER: " << static_cast<T>(mask) << "\nsize: " << sizeof(mask);
+	_getch();*/
 	_getch();
-	return static_cast<T>(mask);
+	return number;
 }
 
 template<typename T>
@@ -156,12 +185,13 @@ T choiseEditMenu(int menuID, T number, int typeID)
 		number = choiseBinMenu(number, typeID);
 		break;
 	case 2:
-		printf("%s", "input:\nstart bit: ");
+		/*printf("%s", "input:\nstart bit: ");
 		scanf("%d", &startBit);
 		printf("%s", "end bit: ");
 		scanf("%d", &endBit);
 		printf("%s", "state: ");
-		scanf("%d", &state);
+		scanf("%d", &state);*/
+		startBit = endBit = state = 0;
 		if (state != 0 && state != 1)
 			return number;
 		number = setRangeBitState(number, startBit, endBit, state, typeID);
@@ -220,4 +250,27 @@ void printBinNumber(const T number, int typeID)
 	}
 	printLine(sizeof(T));
 	_getch();
+}
+
+template<typename T>
+long long TypeToLongLong(const T number)
+{
+	char *pointer = (char*)&number;
+	long long numberLL = 0;
+	std::cout << "source:\n";
+	printBinNumber(number, 3);
+	char *pointerLL = (char*)&numberLL;
+	pointer += sizeof(T) - 1;
+	pointerLL += sizeof(long long) - 1;
+	for (int i = 0, count = sizeof(T) * 8 - 1; i < sizeof(T); i++, pointer--, pointerLL--)
+	{
+		for (int j = 7; j >= 0; j--, count--)
+		{
+			(*pointerLL) |=  (((*pointer) >> j) & 0x01)<< j;
+			//printf("%d,", (((*pointer) >> j) & 0x01) << j);
+		}
+	}
+	std::cout << "copy:\n";
+	printBinNumber(numberLL, 3);
+	return numberLL;
 }
