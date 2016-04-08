@@ -107,43 +107,44 @@ T setRangeBitState(const T number, int startBit, int endBit, bool state, int typ
 	long long mask = 0;
 	T newNumber=number;
 	char *pointer = (char*)&(mask) + sizeof(mask) - 1;	
-	char *pointerNewNumber = (char*)&(newNumber)+sizeof(newNumber) - 1;
+	char *pointerNewNumber = (char*)&(newNumber)+sizeof(T) - 1;
 	if (startBit < 0 || startBit >= (8 * sizeof(T)) || endBit < 0 || endBit >= (8 * sizeof(T)))
 		throw 7;
+	std::cout <<"size ptr: "<< sizeof(pointer) << "\n";
 	printf("start bit: %d\nend bit: %d\nstate: %d\n\n", startBit, endBit, state);
-	for (int count = 8 * sizeof(mask) - 1, i = sizeof(mask) - 1; i >= 0; i--, pointer--, pointerNewNumber--)
+	for (int count = 8 * sizeof(T) - 1, i = sizeof(T) - 1; i >= 0; i--, pointer--, pointerNewNumber--)
 		//generate mask
 	{
 		for (int j = 7; j >= 0; j--, count--)
 			if (endBit >= count && startBit <= count)
 				(*pointer) |= 1 << j;
-		if (state == 1)
-			(*pointerNewNumber) |= *pointer;
+		char tmp1 = *pointer, tmp2 = *pointerNewNumber;
+		if (state == 1) {			
+			_asm {
+				mov ah, tmp1;
+				mov al, tmp2;
+				or ah, al;
+				mov tmp2, ah;
+			}
+		}
 		else
 		{
-			(*pointer) = ~(*pointer);
-			(*pointerNewNumber) &= *pointer;
+			tmp1 = ~tmp1;
+			_asm {
+				mov ah, tmp1;
+				mov al, tmp2;
+				and ah, al;
+				mov tmp2, ah;
+			}
 		}
+		*pointerNewNumber = tmp2;
 	}
-	/*if (state == 0)
-		mask = ~mask;*/
-	//pointer = +sizeof(mask) - 1;
-	//pointerNewNumber =+sizeof(newNumber) - 1;
-	/*for (int i = 8 * sizeof(T) - 1; i >= 0; i--,)
-	{
-		if (state == 1)
-			(*pointerNewNumber) |= *pointer;
-		else
-			(*pointerNewNumber) &= *pointer;
-	}
-	*/
 	std::cout << "source NUMBER: " << number << "\n";
 	printBinNumberWithMask(number, startBit, endBit);
 	printf("\n%s", "MASK:");
-	printBinNumberWithMask(mask, startBit, endBit);
+	printBinNumber(mask, 0);
 	std::cout << "\nresult NUMBER: " << newNumber;
 	printBinNumberWithMask(newNumber, startBit, endBit);
-	
 	_getch();
 	return number;
 }
