@@ -32,7 +32,6 @@ void mainMenu()
 				break;
 			case enter:
 				isExit = choiseInputType(mainMenuID);
-				//printMainMenu(0);
 				printMenu("MAIN MENU", menuText, sizeof(menuText) / sizeof(*menuText), mainMenuID, 1);
 				break;
 			case escape:
@@ -40,11 +39,12 @@ void mainMenu()
 				break;
 			case F1_key:
 				printHelp();
+				system("cls");
+				printMenu("MAIN MENU", menuText, sizeof(menuText) / sizeof(*menuText), mainMenuID, 1);
 				break;
 			default:
 				break;
 			}
-			//printMainMenu(mainMenuID);
 			printMenu("MAIN MENU", menuText, sizeof(menuText) / sizeof(*menuText), mainMenuID, 0);
 		}
 		catch (int errID) {
@@ -63,6 +63,7 @@ bool choiseInputType(int menuID)
 	5-long
 	6-color menu
 	*/
+	system("cls");
 	int a;
 	char b;
 	float c;
@@ -74,14 +75,12 @@ bool choiseInputType(int menuID)
 		printf("int: ");
 		if (!scanf("%d", &a))
 			throw 1;
-		//printf("readed: %d\n", a);
 		a = editMenu(a, menuID);
 		break;
 	case 2:
 		printf("char: ");
 		if (scanf("%c", &b) == 0)
 			throw 1;
-		//printf("readed: %c\n", b);
 		b = editMenu(b, menuID);
 		break;
 	case 3:
@@ -95,14 +94,12 @@ bool choiseInputType(int menuID)
 		printf("double: ");
 		if (scanf("%lf", &d) == 0)
 			throw 1;
-		//printf("readed: %lf\n", d);
 		d = editMenu(d, menuID);
 		break;
 	case 5:
 		printf("long: ");
 		if (scanf("%d", &e) == 0)
 			throw 1;
-		//printf("readed: %d\n", e);
 		e = editMenu(e, menuID);
 		break;
 	case 6:

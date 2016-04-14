@@ -154,7 +154,6 @@ T setRangeBitState(const T number, int typeID)
 	printBinNumberWithMask(mask, startBit, endBit);
 	std::cout << "\nresult NUMBER: " << newNumber;
 	printBinNumberWithMask(newNumber, startBit, endBit);
-	_getch();
 	return newNumber;
 }
 
@@ -246,9 +245,11 @@ T choiseEditMenu(int menuID, T number, int typeID)
 		break;
 	case 2:
 		number = setRangeBitState(number, typeID);
+		system("pause");
 		break;
 	case 3:
 		printBinNumber(number, typeID);
+		system("pause");
 		break;
 	default:
 		return false;
@@ -300,7 +301,6 @@ void printBinNumber(const T number, int typeID)
 		printf(" ");
 	}
 	printLine(sizeof(T));
-	_getch();
 }
 
 template<typename T>
