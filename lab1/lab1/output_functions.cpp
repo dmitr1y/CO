@@ -1,11 +1,14 @@
 #include "output_functions.h"
 #include "templates.cpp"
 
+#define clearStrLength 25
+
+
 void clearStr(COORD pos)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, pos);
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < clearStrLength; i++)
 		printf(" ");
 	SetConsoleCursorPosition(hConsole, pos);
 }
@@ -179,7 +182,7 @@ void printColorMenu(int colorMenuID, int subColorMenuID)
 void printSubColorMenu(int menuID)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	char *menuText[] = { "sign","order", "mantissa" };
+	char *menuText[] = { " sign ","order ", "mantissa " };
 	printf("%s", ":::");
 	int arrColor[3];
 	arrColor[0] = color.sign;

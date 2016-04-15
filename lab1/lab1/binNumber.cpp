@@ -1,6 +1,6 @@
 #include "binNumber.h"
 
-binNumber::binNumber(unsigned short int posSign, unsigned short int posOerder, unsigned short int posMantissa)
+binNumber::binNumber( short int posSign,  short int posOerder,  short int posMantissa)
 {
 	sign = posSign;
 	order = posOerder;

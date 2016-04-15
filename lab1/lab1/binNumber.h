@@ -6,6 +6,6 @@ public:
 	int sign;
 	int mantissa;
 	int order;
-	binNumber(unsigned short int, unsigned short int, unsigned short int);
+	binNumber( short int,  short int,  short int);
 	binNumber();
 };
