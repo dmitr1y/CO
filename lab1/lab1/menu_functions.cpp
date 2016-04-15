@@ -32,7 +32,6 @@ void mainMenu()
 				break;
 			case enter:
 				isExit = choiseInputType(mainMenuID);
-			//	system("cls");
 				printMenu("MAIN MENU", menuText, sizeof(menuText) / sizeof(*menuText), mainMenuID, 1);
 				break;
 			case escape:

@@ -241,5 +241,8 @@ void setMenuColor(int pos, int typeID, int menuID)
 	if (pos == menuID)
 		SetConsoleTextAttribute(hConsole, (WORD)((0 << 4) | 15));
 	else
+	{
+
+	}
 		setColorForTypes(typeID, pos);
 }
