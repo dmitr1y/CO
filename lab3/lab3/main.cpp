@@ -45,16 +45,26 @@ void DrawGrid()
 {
 	glBegin(GL_LINES);
 	glColor3ub(224, 225, 225);
-	for (float i = 0; i < Width; i += dx*ZOOMX)
+	for (float i = Width/2; i < Width; i += dx*ZOOMX)
 	{
 		glVertex2f(i / ZOOMX, 0 );
 		glVertex2f(i / ZOOMX, Height / ZOOMY);
 	}
+	for (float i = Width / 2; i >= 0; i -= dx*ZOOMX)
+	{
+		glVertex2f(i / ZOOMX, 0);
+		glVertex2f(i / ZOOMX, Height / ZOOMY);
+	}
 	glVertex2f(Width / (2 * ZOOMX), 0);
 	glVertex2f(Width / (2 * ZOOMX), Height / ZOOMY);
-	for (float i = 0; i < Height; i += dy*ZOOMY)
+	for (float i = Height/2; i < Height; i += dy*ZOOMY)
 	{
 		glVertex2f(0 , i / ZOOMY);
+		glVertex2f(Width / ZOOMX, i / ZOOMY);
+	}
+	for (float i = Height / 2; i >= 0; i -= dy*ZOOMY)
+	{
+		glVertex2f(0, i / ZOOMY);
 		glVertex2f(Width / ZOOMX, i / ZOOMY);
 	}
 	glEnd();
@@ -65,20 +75,30 @@ void DrawOxis()
 	glBegin(GL_LINES);
 	glColor3f(0.0, 0.0, 0.0);
 	//X
-	glVertex2f(0.0, Height / (ZOOMX*2));
-	glVertex2f(Width/ZOOMY, Height / (ZOOMX * 2));	
+	glVertex2f(0.0, Height / (ZOOMY*2));
+	glVertex2f(Width/ZOOMX, Height / (ZOOMY * 2));	
 	for (float i = Width/2; i < Width; i += dx*ZOOMX)
 	{
 		glVertex2f(i / ZOOMX, (Height / 2 + 2.5)/ZOOMY);
 		glVertex2f(i / ZOOMX, (Height / 2 - 2.5)/ZOOMY);
 	}
+	for (float i = Width / 2; i >= 0; i -= dx*ZOOMX)
+	{
+		glVertex2f(i / ZOOMX, (Height / 2 + 2.5) / ZOOMY);
+		glVertex2f(i / ZOOMX, (Height / 2 - 2.5) / ZOOMY);
+	}
 	//Y
 	glVertex2f(Width / (2*ZOOMX), 0);
 	glVertex2f(Width / (2*ZOOMX), Height/ZOOMY);
-	for (float i = 0; i < Height; i += dy*ZOOMY)
+	for (float i = Height/2; i < Height; i += dy*ZOOMY)
 	{
 		glVertex2f((Width / 2 + 2.5)/ZOOMX, i/ZOOMY);
 		glVertex2f((Width / 2 - 2.5)/ZOOMX, i / ZOOMY);
+	}
+	for (float i = Height / 2; i >=0; i -= dy*ZOOMY)
+	{
+		glVertex2f((Width / 2 + 2.5) / ZOOMX, i / ZOOMY);
+		glVertex2f((Width / 2 - 2.5) / ZOOMX, i / ZOOMY);
 	}
 	glEnd();
 }
@@ -139,13 +159,13 @@ void Keyboard(unsigned char key, int x, int y)
 	}
 	if (key == 'x')
 	{
-		ZOOMX += 0.5;
+		ZOOMX += 1;
 		std::cout << "zoom X:" << ZOOMX << "\n";
 		Display();
 	}
 	if (key == 'y')
 	{
-		ZOOMY += 0.5;
+		ZOOMY += 1;
 		std::cout << "zoom Y:" << ZOOMY << "\n";
 		Display();
 	}
